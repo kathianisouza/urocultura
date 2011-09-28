@@ -21,4 +21,4 @@
 
 
 
-_Situação: Em desenvolvimento (ED) / Em aberto (EA) / Finalizado F_
+_Situação: Em desenvolvimento (ED) / Em aberto (EA) / Finalizado (F)_
