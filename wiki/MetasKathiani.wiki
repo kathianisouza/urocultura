@@ -1,7 +1,8 @@
 === METAS EM ABERTO SETEMBRO (27/09-04/10) ===
 
-    * Criação do gerador de amostras. *(Em desenvolvimento)*
-    * Geração e organização das amostras de urocultura. *(Em desenvolvimento)*
+    * Criação de um banco de artigos sobre Template Matching.*(EA)*
+    * Criação do gerador de amostras. *(ED)*
+    * Geração e organização das amostras de urocultura. *(ED)*
 
 
 
@@ -19,4 +20,5 @@
 
 
 
-_Situação: Em desenvolvimento / Finalizado_
+
+_Situação: Em desenvolvimento (ED) / Em aberto (EA) / Finalizado F_
