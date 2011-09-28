@@ -1,0 +1,4 @@
+===[METAS EM ABERTO SETEMBRO - 2011]===
+
+    * Criação do gerador de amostras.
+    * Geração e organização das amostras de urocultura.
