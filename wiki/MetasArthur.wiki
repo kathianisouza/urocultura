@@ -1,10 +1,8 @@
 === METAS EM ABERTO SETEMBRO (27/09-04/10) ===
 
-    * Criação do gerador de amostras. *(Em desenvolvimento)*
-    * Geração e organização das amostras de urocultura. *(Em 
-desenvolvimento)*
-    * Criação de um banco de artigos sobre Hough Circles.*(Em 
-aberto)*
+    * Criação de um banco de artigos sobre Hough Circles.*(EA)*
+    * Criação do gerador de amostras. *(ED)*
+    * Geração e organização das amostras de urocultura. *(ED)*
 
 
 
@@ -23,4 +21,4 @@ aberto)*
 
 
 
-_Situação: Em desenvolvimento / Em aberto / Finalizado_
+_Situação: Em desenvolvimento (ED) / Em aberto (EA) / Finalizado F_
