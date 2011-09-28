@@ -1,4 +1,4 @@
-=== METAS EM ABERTO SETEMBRO - 2011 ===
+=== METAS EM ABERTO SETEMBRO (27/09-04/10) ===
 
     * Criação do gerador de amostras. *(Em desenvolvimento)*
     * Geração e organização das amostras de urocultura. *(Em desenvolvimento)*
