@@ -1,6 +1,6 @@
 === METAS EM ABERTO SETEMBRO (27/09-04/10) ===
 
-    * Criação de um banco de artigos sobre Template Matching.*(EA)*
+    * Criação de um banco de artigos sobre Template Matching. *(EA)*
     * Criação do gerador de amostras. *(ED)*
     * Geração e organização das amostras de urocultura. *(ED)*
 
