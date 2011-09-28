@@ -1,0 +1,15 @@
+== Descrição organização de amostras ==
+
+
+Segue em anexo, uma sugestão de organização das amostras que serão geradas.
+
+Para cada imagem teremos uma pasta.
+----
+Pasta Image1
+ * image1_253c.jpg (253c é o total de colônias encontrado na imagem 1)
+ * red_image1_0c.jpg (0c 0 colônias do lado esquerdo(vermelho))
+ * green_image1_253c (253c 253 colônias do lado direito(verde))
+
+Subpasta Samples_Green_Image1_100x100 (pasta de amostras tamanho 100x100)
+ * sample1_20green_image1_40c.jpg ( primeira amostra de total 20, referente a imagem 1, com 40 colônias encontradas.)
+ * sample2_20green_image1_40c.jpg ( segunda amostra de total 20, referente a imagem 1, com 68 colônias encontradas.)
