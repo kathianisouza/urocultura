@@ -6,6 +6,9 @@
     * Migrar código gerador de amostras para svn. *(EA)*
     * Criação de um banco de artigos sobre Hough Circles. *(EA)*
 
+=== METAS EM ABERTO SETEMBRO (15/11-22/11) ===
+
+Colocar os comentários e remover.
 
 === METAS EM ABERTO SETEMBRO (27/09-04/10) ===
 
