@@ -1,8 +1,16 @@
+=== METAS EM ABERTO SETEMBRO (22/11-29/11) ===
+
+    * Implementação de uma primeira versão de ambiente para contagem de colonias (Usar como referência plugin HoughCircles[Pistori])
+    * Migrar código plugin HoughCircles[Pistori] src/plugins/hough, para svn. *(EA)*
+    * Migrar imagens para svn. *(EA)*
+    * Migrar código gerador de amostras para svn. *(EA)*
+    * Criação de um banco de artigos sobre Hough Circles. *(EA)*
+
+
 === METAS EM ABERTO SETEMBRO (27/09-04/10) ===
 
-    * Criação de um banco de artigos sobre Hough Circles. *(EA)*
-    * Criação do gerador de amostras. *(ED)*
-    * Geração e organização das amostras de urocultura. *(ED)*
+    * Criação do gerador de amostras. *(F)*
+    * Geração e organização das amostras de urocultura. *(F)*
 
 
 
