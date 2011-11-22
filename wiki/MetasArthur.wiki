@@ -1,15 +1,20 @@
 === METAS EM ABERTO NOVEMBRO (22/11-29/11) ===
 
     * Implementação de uma primeira versão de ambiente para contagem de colonias (Usar como referência plugin Hough Circles (Pistori) )*(EA)*
-    * Migrar código plugin Hough Circles (Pistori) src,plugins,hough, para svn. *(EA)*
-    * Migrar imagens para svn. *(EA)*
-    * Migrar código gerador de amostras para svn. *(EA)*
+    * Migrar código plugin Hough Circles (Pistori) src,plugins,hough, para svn. *(F)*
+    * Migrar imagens para svn. *(F)*
+    * Migrar código gerador de amostras para svn. *(F)*
     * Criação de um banco de artigos sobre Hough Circles. *(EA)*
-    * Remover os comentário da wiki. *(EA)*
+    * Remover os comentário da wiki. *(F)*
 
 === METAS EM ABERTO NOVEMBRO (15/11-22/11) ===
 
-Colocar os comentários e remover.
+Gerador de amostras concluído. Um detalhe a ser corrigido ao instalar o plugin, pois o mesmo não se localiza na aba de plugins do ImageJ ao ser instalado.
+
+Finalizando o banco de amostras, algumas imagens com problemas de iluminação, duplicando algumas colônias por causa do reflexo gerado pela borda da placa de Petri.
+
+Estudo de artigo para a compreensão de melhores técnicas a serem utilizadas usando HCT (Hough Circle Transform).
+
 
 === METAS EM ABERTO SETEMBRO (27/09-04/10) ===
 
