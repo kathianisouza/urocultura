@@ -5,6 +5,7 @@
     * Migrar imagens para svn. *(EA)*
     * Migrar código gerador de amostras para svn. *(EA)*
     * Criação de um banco de artigos sobre Hough Circles. *(EA)*
+    * Remover os comentário da wiki. *(EA)*
 
 === METAS EM ABERTO SETEMBRO (15/11-22/11) ===
 
