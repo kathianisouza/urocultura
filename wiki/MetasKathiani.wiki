@@ -1,8 +1,20 @@
+=== METAS EM ABERTO SETEMBRO (22/11-29/11) ===
+
+    * Implementação de uma primeira versão de ambiente para contagem de colonias, usando Template Matching *(EA)*
+    * Migrar código plugin Template Matching (ImageJ) src,plugins,template, para svn. *(EA)*
+    * Migrar imagens para svn. *(EA)*
+    * Migrar código gerador de amostras para svn. *(EA)*
+    * Criação de um banco de artigos sobre Template Matching. *(EA)*
+    * Remover os comentário da wiki. *(EA)*
+
+=== METAS EM ABERTO SETEMBRO (15/11-22/11) ===
+
+Colocar os comentários e remover.
+
 === METAS EM ABERTO SETEMBRO (27/09-04/10) ===
 
-    * Criação de um banco de artigos sobre Template Matching. *(EA)*
-    * Criação do gerador de amostras. *(ED)*
-    * Geração e organização das amostras de urocultura. *(ED)*
+    * Criação do gerador de amostras. *(F)*
+    * Geração e organização das amostras de urocultura. *(F)*
 
 
 
