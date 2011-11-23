@@ -1,15 +1,15 @@
-=== METAS EM ABERTO SETEMBRO (22/11-29/11) ===
+=== METAS EM ABERTO NOVEMBRO (22/11-29/11) ===
 
     * Implementação de uma primeira versão de ambiente para contagem de colonias, usando Template Matching *(EA)*
     * Migrar código plugin Template Matching (ImageJ) src,plugins,template, para svn. *(EA)*
     * Migrar imagens para svn. *(EA)*
     * Migrar código gerador de amostras para svn. *(EA)*
     * Criação de um banco de artigos sobre Template Matching. *(EA)*
-    * Remover os comentário da wiki. *(EA)*
+    
 
-=== METAS EM ABERTO SETEMBRO (15/11-22/11) ===
+=== METAS EM ABERTO NOVEMBRO (15/11-22/11) ===
 
-Colocar os comentários e remover.
+     * Remover os comentário da wiki. *(F)*
 
 === METAS EM ABERTO SETEMBRO (27/09-04/10) ===
 
