@@ -9,7 +9,7 @@
 
 === METAS EM ABERTO NOVEMBRO (15/11-22/11) ===
 
-     * Remover os comentário da wiki. *(F)*
+     * Remover os comentários da wiki. *(F)*
 
 === METAS EM ABERTO SETEMBRO (27/09-04/10) ===
 
