@@ -2,7 +2,7 @@
 
     * Implementação de uma primeira versão de ambiente para contagem de colonias (Usar como referência plugin Hough Circles (Pistori) )*(EA)*
     * Migrar código plugin Hough Circles (Pistori) src,plugins,hough, para svn. *(F)*
-    * Migrar imagens para svn. *(EA)*
+    * Migrar imagens para svn. *(F)*
     * Migrar código gerador de amostras para svn. *(F)*
     * Criação de um banco de artigos sobre Hough Circles. *(EA)*
     * Remover os comentário da wiki. *(F)*
