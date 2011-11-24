@@ -5,7 +5,6 @@
     * Migrar imagens para svn. *(EA)*
     * Migrar código gerador de amostras para svn. *(EA)*
     * Criação de um banco de artigos sobre Template Matching. *(ED)*
-
        - Leitura do artigo de  Gabriel Marcelino Alves:   
           Método Fundamentado  em Processamento Digital de Imagens  para   
           Contagem Automática de Unidades Formadoras de Colônias.
