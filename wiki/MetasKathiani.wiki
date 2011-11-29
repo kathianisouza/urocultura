@@ -3,7 +3,7 @@
     * Implementação de uma primeira versão de ambiente para contagem de colonias, usando Template Matching *(EA)*
     * Migrar código plugin Template Matching (ImageJ) src,plugins,template, para svn. *(EA)*
     * Migrar imagens para svn. *(F)*
-    * Migrar código gerador de amostras para svn. *(ED)*
+    * Migrar código gerador de amostras para svn. *(F)*
     * Criação de um banco de artigos sobre Template Matching. *(ED)*
        - Leitura do artigo de  Gabriel Marcelino Alves:   
           Método Fundamentado  em Processamento Digital de Imagens  para   
