@@ -206,8 +206,8 @@ public class Hough_Circles implements PlugInFilter {
                         int indexR=(radius-radiusMin)/radiusInc;
                         for(int i = 0; i < lutSize; i++) {
 
-                            int a = x + lut[1][i][indexR]; 
-                            int b = y + lut[0][i][indexR]; 
+                            int a = x + lut[1][i][indexR]; // x + rsin
+                            int b = y + lut[0][i][indexR]; // y + rcos
                             if((b >= 0) & (b < height) & (a >= 0) & (a < width)) {
                                 houghValues[a][b][indexR] += 1;
                             }
