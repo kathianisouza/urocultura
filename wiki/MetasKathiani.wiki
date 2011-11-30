@@ -9,7 +9,7 @@
           Método Fundamentado  em Processamento Digital de Imagens  para   
           Contagem Automática de Unidades Formadoras de Colônias.
         Este artigo pode ser encontrado através do link: http://www.bdtd.ufscar.br/htdocs/tedeSimplificado//tde_busca/arquivo.php?codArquivo=1324   
-       - Produção de resumo referente ao artigo. *(ED)*
+       - Produção de resumo referente ao artigo. *(EA)*
 
 
  
