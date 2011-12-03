@@ -1,9 +1,9 @@
 === METAS EM ABERTO NOVEMBRO/DEZEMBRO (29/11-06/12) ===
    
     * Implementação de uma primeira versão de ambiente para contagem de colonias (Usar como referência plugin Hough Circles (Pistori) )*(F)*
-         Análises:
-         - Custo computacional altíssimo, pois varre toda a imagem para       detectar uma colônia de cada vez.
-         - Utilizando este mesmo algoritmo, será necessário testar melhores valores de parada da contagem. (Linha: 176).
+         * Análises:
+         *- Custo computacional altíssimo, pois varre toda a imagem para       detectar uma colônia de cada vez.
+         *- Utilizando este mesmo algoritmo, será necessário testar melhores valores de parada da contagem. (Linha: 176).
 
     * Criação de um banco de artigos sobre Hough Circles. *(EA)*
 
