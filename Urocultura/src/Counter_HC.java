@@ -1,9 +1,8 @@
-//Código em fase de estudo.
-//Dúvidas nos métodos buildLookUpTable(), houghTransform ()
-//Trabalhar método getCenterPoints()
+/*Código importado de Hough_Circles.java (Hemerson Pistori),
+ * com algumas adaptações para contagem de colônias bacterianas
+ * em exames de urina. 
+ */
 
-
-import java.awt.Point;
 import java.awt.Rectangle;
 
 import ij.plugin.filter.PlugInFilter; 
@@ -28,7 +27,7 @@ public class Counter_HC implements PlugInFilter {
     public int offy;   // ROI y offset
     int lut[][][]; // LookUp Table for rsin e rcos values
 
-    int CountCircles;
+    int countCircles;
     
     ImagePlus imp = null;
     
@@ -38,6 +37,13 @@ public class Counter_HC implements PlugInFilter {
 	}
 
 	public void run(ImageProcessor ip) {
+		ip = ip.convertToByte(true);
+		ip.smooth();
+		ip.findEdges();
+		ip.threshold(80);
+		IJ.run("Convert to Mask");
+		new ImagePlus("",ip).show();
+		
 		imageValues = (byte[])ip.getPixels();
         Rectangle r = ip.getRoi();
 		
@@ -48,13 +54,6 @@ public class Counter_HC implements PlugInFilter {
         offset = ip.getWidth();
         depth = ((radiusMax-radiusMin)/radiusInc)+1;
         
-		/*ip = ip.convertToByte(true);
-		ip.smooth();
-		ip.findEdges();
-		ip.threshold(80);
-		IJ.run("Convert to Mask");
-		ip.invert();*/
-		
 		houghTransform();
 
         // Create image View for Hough Transform.
@@ -63,6 +62,10 @@ public class Counter_HC implements PlugInFilter {
         createHoughPixels(newpixels);
 	
         new ImagePlus("Hough Space [r="+radiusMin+"]", newip).show();
+	
+        getCenterPoints();
+        
+        JOptionPane.showMessageDialog(null,"Colônias: " + countCircles);
 	}
 
 	private int buildLookUpTable() {
@@ -139,7 +142,7 @@ public class Counter_HC implements PlugInFilter {
         }
     }
 
-    private void getCenterPoints (int maxCircles) {
+    private void getCenterPoints () {
 
 
         int xMax = 0;
@@ -147,7 +150,6 @@ public class Counter_HC implements PlugInFilter {
         int rMax = 0;
         
         double counterMax = -1;
-
 
         do{
             counterMax = -1;
@@ -158,19 +160,61 @@ public class Counter_HC implements PlugInFilter {
                 for(int y = 0; y < height; y++) {
                     for(int x = 0; x < width; x++) {
                         if(houghValues[x][y][indexR] > counterMax) {
-                            counterMax = houghValues[x][y][indexR];  // dar um print neste valor
+                            counterMax = houghValues[x][y][indexR]; 
+                            
                             xMax = x;
                             yMax = y;
                             rMax = radius;
                         }
                     }
-
                 }
             }
-
-            CountCircles += 1;
-            clearNeighbours(xMax,yMax,rMax);    // verificar este método
+            //JOptionPane.showMessageDialog(null,"" + counterMax);
+            countCircles += 1;
+            clearNeighbours(xMax,yMax,rMax); 
             
-        }while(); // não for fim da imagem
+        }while(counterMax > 55);   // ajustar condição de parada
     }
+
+    private void clearNeighbours(int x,int y, int radius) {
+
+
+        // The following code just clean the points around the center of the circle found.
+
+
+        double halfRadius = radius / 2.0F;
+        double halfSquared = halfRadius*halfRadius;
+
+
+        int y1 = (int)Math.floor ((double)y - halfRadius);
+        int y2 = (int)Math.ceil ((double)y + halfRadius) + 1;
+        int x1 = (int)Math.floor ((double)x - halfRadius);
+        int x2 = (int)Math.ceil ((double)x + halfRadius) + 1;
+
+
+
+        if(y1 < 0)
+            y1 = 0;
+        if(y2 > height)
+            y2 = height;
+        if(x1 < 0)
+            x1 = 0;
+        if(x2 > width)
+            x2 = width;
+
+
+
+        for(int r = radiusMin;r <= radiusMax;r = r+radiusInc) {
+            int indexR = (r-radiusMin)/radiusInc;
+            for(int i = y1; i < y2; i++) {
+                for(int j = x1; j < x2; j++) {	      	     
+                    if(Math.pow (j - x, 2D) + Math.pow (i - y, 2D) < halfSquared) {
+                        houghValues[j][i][indexR] = 0.0D;
+                    }
+                }
+            }
+        }
+
+    }
+
 }
