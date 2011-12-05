@@ -3,8 +3,12 @@
  * em exames de urina. 
  */
 
-import java.awt.Rectangle;
+// Construção do método fileResults() em andamento.
 
+import java.awt.Rectangle;
+import java.io.File;
+
+import ij.gui.GenericDialog;
 import ij.plugin.filter.PlugInFilter; 
 import ij.ImagePlus; 
 import ij.process.ByteProcessor;
@@ -28,6 +32,7 @@ public class Counter_HC implements PlugInFilter {
     int lut[][][]; // LookUp Table for rsin e rcos values
 
     int countCircles;
+    String directory;
     
     ImagePlus imp = null;
     
@@ -37,12 +42,14 @@ public class Counter_HC implements PlugInFilter {
 	}
 
 	public void run(ImageProcessor ip) {
+		fileResults();
+		
 		ip = ip.convertToByte(true);
 		ip.smooth();
 		ip.findEdges();
 		ip.threshold(80);
 		IJ.run("Convert to Mask");
-		new ImagePlus("",ip).show();
+		//new ImagePlus("",ip).show();
 		
 		imageValues = (byte[])ip.getPixels();
         Rectangle r = ip.getRoi();
@@ -169,7 +176,7 @@ public class Counter_HC implements PlugInFilter {
                     }
                 }
             }
-            //JOptionPane.showMessageDialog(null,"" + counterMax);
+            
             countCircles += 1;
             clearNeighbours(xMax,yMax,rMax); 
             
@@ -217,4 +224,30 @@ public class Counter_HC implements PlugInFilter {
 
     }
 
+    /*void fileResults(){
+    	
+    	getParameters();
+    	
+    	String[] list = new String[70];
+    	File file = new File(directory);
+    	
+    	if(file.exists()){
+    		list = file.list();
+    	}
+    		
+    	
+    	for(int i = 0; i < list.length; i++){
+    		JOptionPane.showMessageDialog(null,list[i]);
+    	}
+    	
+    }
+
+    void getParameters(){
+    	GenericDialog gd = new GenericDialog("Parameters");
+    	
+    	
+    	gd.addStringField("Directory",directory);
+    	gd.showDialog();
+    	directory = gd.getNextString();
+    }*/
 }
