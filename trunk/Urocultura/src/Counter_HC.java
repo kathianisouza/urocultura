@@ -3,12 +3,13 @@
  * em exames de urina. 
  */
 
-// Construção do método fileResults() em andamento.
-
 import java.awt.Rectangle;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import ij.gui.GenericDialog;
+import ij.io.Opener;
 import ij.plugin.filter.PlugInFilter; 
 import ij.ImagePlus; 
 import ij.process.ByteProcessor;
@@ -32,7 +33,8 @@ public class Counter_HC implements PlugInFilter {
     int lut[][][]; // LookUp Table for rsin e rcos values
 
     int countCircles;
-    String directory;
+    String directoryImages = "D:\\Documentos\\SI - UFGD\\Projeto Automatização na Contagem de Colônias\\Templates\\image1\\Samples\\";
+    String directoryFile = "D:\\Documentos\\SI - UFGD\\Projeto Automatização na Contagem de Colônias\\Templates\\image1\\";
     
     ImagePlus imp = null;
     
@@ -42,37 +44,57 @@ public class Counter_HC implements PlugInFilter {
 	}
 
 	public void run(ImageProcessor ip) {
-		fileResults();
+		// Lê entradas do usuário. Diretório das templates para contagem, diretório para salvar arquivo .xls
+		getParameters();
 		
-		ip = ip.convertToByte(true);
-		ip.smooth();
-		ip.findEdges();
-		ip.threshold(80);
-		IJ.run("Convert to Mask");
-		//new ImagePlus("",ip).show();
-		
-		imageValues = (byte[])ip.getPixels();
-        Rectangle r = ip.getRoi();
-		
-        offx = r.x;
-        offy = r.y;
-        width = r.width;
-        height = r.height;
-        offset = ip.getWidth();
-        depth = ((radiusMax-radiusMin)/radiusInc)+1;
-        
-		houghTransform();
+		String[] list = new String[70];
+    	File file = new File(directoryImages);
+    	Opener op = new Opener();
+    	
+    	if(file.exists()){
+    		list = file.list();
+    	}
+    	
+    	for(int i = 0; i < list.length; i++){
+    		
+    		// Referencia imagem aberta.
+    		imp = op.openImage(directoryImages + list[i]);
+    		ip = imp.getProcessor();
+    		
+    		//Pre processamento
+    		ip = ip.convertToByte(true);
+    		ip.smooth();
+    		ip.findEdges();
+    		ip.threshold(80);
+    		IJ.run("Convert to Mask");
+    	
+    		imageValues = (byte[])ip.getPixels();
+            Rectangle r = ip.getRoi();
+    		
+            offx = r.x;
+            offy = r.y;
+            width = r.width;
+            height = r.height;
+            offset = ip.getWidth();
+            depth = ((radiusMax-radiusMin)/radiusInc)+1;
+            
+    		houghTransform();
 
-        // Create image View for Hough Transform.
-        ImageProcessor newip = new ByteProcessor(width, height);
-        byte[] newpixels = (byte[])newip.getPixels();
-        createHoughPixels(newpixels);
-	
-        new ImagePlus("Hough Space [r="+radiusMin+"]", newip).show();
-	
-        getCenterPoints();
-        
-        JOptionPane.showMessageDialog(null,"Colônias: " + countCircles);
+            // Create image View for Hough Transform.
+            ImageProcessor newip = new ByteProcessor(width, height);
+            byte[] newpixels = (byte[])newip.getPixels();
+            createHoughPixels(newpixels);
+    	
+            getCenterPoints();
+            
+            //JOptionPane.showMessageDialog(null,"Colônias: " + countCircles);
+            
+            // Arquiva os resultados em .xls
+            fileResults(list[i]);
+            
+            countCircles = 0;
+    	}
+		
 	}
 
 	private int buildLookUpTable() {
@@ -224,30 +246,28 @@ public class Counter_HC implements PlugInFilter {
 
     }
 
-    /*void fileResults(){
+    void fileResults(String idImage){
+    	FileWriter out;
     	
-    	getParameters();
-    	
-    	String[] list = new String[70];
-    	File file = new File(directory);
-    	
-    	if(file.exists()){
-    		list = file.list();
+    	try{
+    		out = new FileWriter(new File(directoryFile + "Resultados.xls"),true);
+    		out.write(idImage + "\t" + countCircles + "\n");
+    		out.close();
+    	}catch(IOException e){
+    		e.printStackTrace();
+    	}catch(Exception e){
+    		e.printStackTrace();
     	}
-    		
-    	
-    	for(int i = 0; i < list.length; i++){
-    		JOptionPane.showMessageDialog(null,list[i]);
-    	}
-    	
     }
 
     void getParameters(){
+    	
     	GenericDialog gd = new GenericDialog("Parameters");
     	
-    	
-    	gd.addStringField("Directory",directory);
+    	gd.addStringField("Templates directory: ",directoryImages,10);
+    	gd.addStringField("Save file (.xls) directory : ",directoryFile,10);
     	gd.showDialog();
-    	directory = gd.getNextString();
-    }*/
+    	directoryImages = gd.getNextString();
+    	directoryFile = gd.getNextString();
+    }
 }
