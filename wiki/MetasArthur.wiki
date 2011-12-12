@@ -1,3 +1,6 @@
+=== METAS EM ABERTO DEZEMBRO (29/11-06/12) ===
+    * Implementar método que varre todas as imagens em um diretório e gera um arquivo que guarda informações de contagem, tais como o nome da imagem e a contagem de colônias realizada pelo programa. *(F)*
+
 === METAS EM ABERTO NOVEMBRO/DEZEMBRO (29/11-06/12) ===
    
     * Implementação de uma primeira versão de ambiente para contagem de colonias (Usar como referência plugin Hough Circles (Pistori) )*(F)*
