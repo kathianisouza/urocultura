@@ -2,6 +2,7 @@
  * com algumas adaptações para contagem de colônias bacterianas
  * em exames de urina. 
  */
+package core;
 
 import java.awt.Rectangle;
 import java.io.File;
@@ -90,7 +91,8 @@ public class Counter_HC implements PlugInFilter {
             //JOptionPane.showMessageDialog(null,"Colônias: " + countCircles);
             
             // Arquiva os resultados em .xls
-            fileResults(list[i]);
+            FileResults.fileHoughCircles(list[i],directoryFile,countCircles);
+            //fileResults(list[i]);
             
             countCircles = 0;
     	}
@@ -246,7 +248,7 @@ public class Counter_HC implements PlugInFilter {
 
     }
 
-    void fileResults(String idImage){
+    /*void fileResults(String idImage){
     	FileWriter out;
     	
     	try{
@@ -258,7 +260,7 @@ public class Counter_HC implements PlugInFilter {
     	}catch(Exception e){
     		e.printStackTrace();
     	}
-    }
+    }*/
 
     void getParameters(){
     	
