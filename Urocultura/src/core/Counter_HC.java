@@ -2,21 +2,24 @@
  * com algumas adaptações para contagem de colônias bacterianas
  * em exames de urina. 
  */
-package core;
+
+// Corrigir problema com watershed
+// Corrigir problema de arquivamento
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.gui.GenericDialog;
+import ij.io.Opener;
+import ij.plugin.filter.PlugInFilter;
+import ij.process.ByteProcessor;
+import ij.process.ImageProcessor;
 
 import java.awt.Rectangle;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
-import ij.gui.GenericDialog;
-import ij.io.Opener;
-import ij.plugin.filter.PlugInFilter; 
-import ij.ImagePlus; 
-import ij.process.ByteProcessor;
-import ij.process.ImageProcessor; 
-import ij.IJ;
 import javax.swing.JOptionPane;
+
+import utils.FileResults;
 
 public class Counter_HC implements PlugInFilter {
 	public int radiusMin = 10;  // Find circles with radius grater or equal radiusMin
@@ -34,6 +37,7 @@ public class Counter_HC implements PlugInFilter {
     int lut[][][]; // LookUp Table for rsin e rcos values
 
     int countCircles;
+    String watershed = "Not";
     String directoryImages = "D:\\Documentos\\SI - UFGD\\Projeto Automatização na Contagem de Colônias\\Templates\\image1\\Samples\\";
     String directoryFile = "D:\\Documentos\\SI - UFGD\\Projeto Automatização na Contagem de Colônias\\Templates\\image1\\";
     
@@ -46,9 +50,12 @@ public class Counter_HC implements PlugInFilter {
 
 	public void run(ImageProcessor ip) {
 		// Lê entradas do usuário. Diretório das templates para contagem, diretório para salvar arquivo .xls
+		int limitCounter;
+		int threshold;
+		
 		getParameters();
 		
-		String[] list = new String[70];
+		String[] list = new String[100];
     	File file = new File(directoryImages);
     	Opener op = new Opener();
     	
@@ -57,45 +64,59 @@ public class Counter_HC implements PlugInFilter {
     	}
     	
     	for(int i = 0; i < list.length; i++){
-    		
-    		// Referencia imagem aberta.
-    		imp = op.openImage(directoryImages + list[i]);
-    		ip = imp.getProcessor();
-    		
-    		//Pre processamento
-    		ip = ip.convertToByte(true);
-    		ip.smooth();
-    		ip.findEdges();
-    		ip.threshold(80);
-    		IJ.run("Convert to Mask");
-    	
-    		imageValues = (byte[])ip.getPixels();
-            Rectangle r = ip.getRoi();
-    		
-            offx = r.x;
-            offy = r.y;
-            width = r.width;
-            height = r.height;
-            offset = ip.getWidth();
-            depth = ((radiusMax-radiusMin)/radiusInc)+1;
-            
-    		houghTransform();
+    		for(threshold = 50; threshold <= 100; threshold += 5){
+    			for(limitCounter = 50; limitCounter <= 60; limitCounter += 2){
+   				    
+    				//Referencia imagem aberta.
+    	    		imp = op.openImage(directoryImages + list[i]);
+    	    		ip = imp.getProcessor();
+    	    		
+    	    		//Pre processamento
+    	    		ip = ip.convertToByte(true);
+    	    		ip.smooth();
+    	    		ip.findEdges();
+    	    		ip.threshold(threshold);
+    	        	IJ.run("Convert to Mask");
+    	        	
+    	        	
+    	        	if(watershed.compareToIgnoreCase("Yes") == 0){
+    	        		JOptionPane.showMessageDialog(null,"Com Watershed");
+    	        		IJ.run("Watershed");
+    	        	}
+    	        	
+    	        	imageValues = (byte[])ip.getPixels();
+    	            Rectangle r = ip.getRoi();
+    	        		
+    	            offx = r.x;
+    	            offy = r.y;
+    	            width = r.width;
+    	            height = r.height;
+    	            offset = ip.getWidth();
+    	            depth = ((radiusMax-radiusMin)/radiusInc)+1;
+    	    			
+    	            houghTransform();
 
-            // Create image View for Hough Transform.
-            ImageProcessor newip = new ByteProcessor(width, height);
-            byte[] newpixels = (byte[])newip.getPixels();
-            createHoughPixels(newpixels);
-    	
-            getCenterPoints();
-            
-            //JOptionPane.showMessageDialog(null,"Colônias: " + countCircles);
-            
-            // Arquiva os resultados em .xls
-            FileResults.fileHoughCircles(list[i],directoryFile,countCircles);
-            //fileResults(list[i]);
-            
-            countCircles = 0;
-    	}
+    	            // Create image View for Hough Transform.
+    	            ImageProcessor newip = new ByteProcessor(width, height);
+    	            byte[] newpixels = (byte[])newip.getPixels();
+    	            createHoughPixels(newpixels);
+    	        	
+    	            getCenterPoints(limitCounter);
+    	                
+    	            //JOptionPane.showMessageDialog(null,"Colônias: " + countCircles);
+    	                
+    	            // Arquiva os resultados em .xls
+    	            FileResults.fileHoughCircles(i,list[i],directoryFile,countCircles,threshold,limitCounter,watershed);
+    	                
+    	            countCircles = 0;
+    				
+    			}
+
+    		
+    		
+    		}
+    		
+        }
 		
 	}
 
@@ -173,7 +194,7 @@ public class Counter_HC implements PlugInFilter {
         }
     }
 
-    private void getCenterPoints () {
+    private void getCenterPoints(int limitCounter) {
 
 
         int xMax = 0;
@@ -204,7 +225,7 @@ public class Counter_HC implements PlugInFilter {
             countCircles += 1;
             clearNeighbours(xMax,yMax,rMax); 
             
-        }while(counterMax > 55);   // ajustar condição de parada
+        }while(counterMax > limitCounter);   // ajustar condição de parada
     }
 
     private void clearNeighbours(int x,int y, int radius) {
@@ -266,9 +287,12 @@ public class Counter_HC implements PlugInFilter {
     	
     	GenericDialog gd = new GenericDialog("Parameters");
     	
+    	gd.addStringField("Watershed (Yes)/(Not): ",watershed,5);
     	gd.addStringField("Templates directory: ",directoryImages,10);
     	gd.addStringField("Save file (.xls) directory : ",directoryFile,10);
     	gd.showDialog();
+    	
+    	watershed = gd.getNextString();
     	directoryImages = gd.getNextString();
     	directoryFile = gd.getNextString();
     }
