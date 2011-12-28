@@ -1,4 +1,4 @@
-// eu modifiquei este código.
+package utils;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -14,10 +14,10 @@ public class FileResults {
     		out = new FileWriter(new File(directoryFile + "Resultados " + "T(" + threshold + ") " + "P(" + limitCounter + ") "
     							+ "W(" + watershed + ")" + ".xls"),true);
     		if(index == 0){
-    			out.write("Imagem" + "\t" + "Threshold" + "Pixel" + "Watershed");
+    			out.write("Imagem" + "\t" + "Colônias" + "\t" + "Threshold" + "\t" + "Pixel" + "\t" + "Watershed" + "\n");
     		}
     		
-    		out.write(idImage + "\t" + countCircles + "\n");
+    		out.write(idImage + "\t" + countCircles + "\t" + threshold + "\t" + limitCounter + "\t" + watershed + "\n");
     		out.close();
     	}catch(IOException e){
     		e.printStackTrace();

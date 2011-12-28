@@ -5,6 +5,7 @@
 
 // Corrigir problema com watershed
 // Corrigir problema de arquivamento
+package core;
 
 import ij.IJ;
 import ij.ImagePlus;
@@ -50,6 +51,7 @@ public class Counter_HC implements PlugInFilter {
 
 	public void run(ImageProcessor ip) {
 		// Lê entradas do usuário. Diretório das templates para contagem, diretório para salvar arquivo .xls
+		int i;
 		int limitCounter;
 		int threshold;
 		
@@ -63,7 +65,7 @@ public class Counter_HC implements PlugInFilter {
     		list = file.list();
     	}
     	
-    	for(int i = 0; i < list.length; i++){
+    	for(i = 0; i < list.length; i++){
     		for(threshold = 50; threshold <= 100; threshold += 5){
     			for(limitCounter = 50; limitCounter <= 60; limitCounter += 2){
    				    
@@ -106,18 +108,15 @@ public class Counter_HC implements PlugInFilter {
     	            //JOptionPane.showMessageDialog(null,"Colônias: " + countCircles);
     	                
     	            // Arquiva os resultados em .xls
+    	           
     	            FileResults.fileHoughCircles(i,list[i],directoryFile,countCircles,threshold,limitCounter,watershed);
     	                
     	            countCircles = 0;
     				
     			}
-
-    		
-    		
     		}
-    		
-        }
-		
+    	}
+    	JOptionPane.showMessageDialog(null,"OPERAÇÃO FINALIZADA");
 	}
 
 	private int buildLookUpTable() {
