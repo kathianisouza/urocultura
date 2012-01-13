@@ -1,6 +1,6 @@
 ===  METAS EM ABERTO JANEIRO ===
     * Realizar experimentos com (EA):
-    - Template fixo
+    - Template fixo.
     - Template Circular;
     - Filtro Gaussiano;
     - Intervalo para controle do contador;
