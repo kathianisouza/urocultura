@@ -1,4 +1,4 @@
-===  METAS EM ABERTO JANEIRO ===
+===  METAS EM ABERTO JANEIRO (09/01)===
     * Realizar experimentos com (EA):
     - Template fixo.
 
