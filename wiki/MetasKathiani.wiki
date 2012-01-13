@@ -1,13 +1,13 @@
 === METAS EM ABERTO NOVEMBRO (29/11-06/12) ===
 
-    * Implementação de uma primeira versão de ambiente para contagem de colonias, usando Template Matching *(EA)*
-    * Migrar código plugin Template Matching (ImageJ) src,plugins,template, para svn. *(EA)*
+    * Implementação de uma primeira versão de ambiente para contagem de colonias, usando Template Matching *(F)*
+    * Migrar código plugin Template Matching (ImageJ) src,plugins,template, para svn. *(F)*
     * Criação de um banco de artigos sobre Template Matching. *(ED)*
        - Leitura do artigo de  Gabriel Marcelino Alves:   
           Método Fundamentado  em Processamento Digital de Imagens  para   
           Contagem Automática de Unidades Formadoras de Colônias.
         Este artigo pode ser encontrado através do link: http://www.bdtd.ufscar.br/htdocs/tedeSimplificado//tde_busca/arquivo.php?codArquivo=1324   
-       - Produção de resumo referente ao artigo. *(EA)*
+       - Produção de resumo referente ao artigo. *(F)*
 
 
 === METAS EM ABERTO NOVEMBRO (22/11-29/11) ===
