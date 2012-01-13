@@ -1,3 +1,12 @@
+===  METAS EM ABERTO JANEIRO ===
+    * Realizar experimentos com (EA):
+    - Template fixo
+    - Template Circular;
+    - Filtro Gaussiano;
+    - Intervalo para controle do contador;
+    - Ajustar valor do  Threshold.
+
+
 === METAS EM ABERTO NOVEMBRO (29/11-06/12) ===
 
     * Implementação de uma primeira versão de ambiente para contagem de colonias, usando Template Matching *(F)*
