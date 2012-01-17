@@ -38,7 +38,8 @@ public class Counter_HC implements PlugInFilter {
     int lut[][][]; // LookUp Table for rsin e rcos values
 
     int countCircles;
-    String watershed = "Not";
+    String edges = "S";
+    String watershed = "N";
     String directoryImages = "D:\\Documentos\\SI - UFGD\\Projeto Automatização na Contagem de Colônias\\Templates\\image1\\Samples\\";
     String directoryFile = "D:\\Documentos\\SI - UFGD\\Projeto Automatização na Contagem de Colônias\\Templates\\image1\\";
     
@@ -76,13 +77,19 @@ public class Counter_HC implements PlugInFilter {
     	    		//Pre processamento
     	    		ip = ip.convertToByte(true);
     	    		ip.smooth();
-    	    		ip.findEdges();
+    	    		
+    	    		if(edges.compareToIgnoreCase("C") == 0){
+    	    			IJ.run("Area filter...", "median=3 deriche=1 hysteresis_high=100 hysteresis_low=50");
+    	    			imp.show();
+    	    		}
+    	    		else{
+    	    			ip.findEdges();
+    	    		}
+    	    		
     	    		ip.threshold(threshold);
     	        	IJ.run("Convert to Mask");
     	        	
-    	        	
-    	        	if(watershed.compareToIgnoreCase("Yes") == 0){
-    	        		JOptionPane.showMessageDialog(null,"Com Watershed");
+    	        	if(watershed.compareToIgnoreCase("Y") == 0){
     	        		IJ.run("Watershed");
     	        	}
     	        	
@@ -109,7 +116,7 @@ public class Counter_HC implements PlugInFilter {
     	                
     	            // Arquiva os resultados em .xls
     	           
-    	            FileResults.fileHoughCircles(i,list[i],directoryFile,countCircles,threshold,limitCounter,watershed);
+    	            FileResults.fileHoughCircles(i,list[i],directoryFile,countCircles,threshold,limitCounter,watershed,edges);
     	                
     	            countCircles = 0;
     				
@@ -286,7 +293,8 @@ public class Counter_HC implements PlugInFilter {
     	
     	GenericDialog gd = new GenericDialog("Parameters");
     	
-    	gd.addStringField("Watershed (Yes)/(Not): ",watershed,5);
+    	gd.addStringField("Edge Filter. Canny(C)/ Sobel(S): ",edges,5);
+    	gd.addStringField("Watershed (Y)/(N): ",watershed,5);
     	gd.addStringField("Templates directory: ",directoryImages,10);
     	gd.addStringField("Save file (.xls) directory : ",directoryFile,10);
     	gd.showDialog();
