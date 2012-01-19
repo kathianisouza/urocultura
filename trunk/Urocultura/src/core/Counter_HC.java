@@ -63,7 +63,7 @@ public class Counter_HC implements PlugInFilter {
     	Opener op = new Opener();
     	
     	if(file.exists()){
-    		list = file.list();
+    		list = file.list();// Recebe o diretório de cada arquivo dentro da pasta
     	}
     	
     	for(i = 0; i < list.length; i++){

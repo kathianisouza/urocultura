@@ -13,10 +13,10 @@ import ij.plugin.filter.PlugInFilter;
 import ij.process.ImageProcessor; 
 import java.awt.Rectangle; 
 import java.io.File;
-
 import ij.io.FileSaver;
 import ij.io.Opener;
 import javax.swing.JOptionPane;
+import utils.FileResults;;
 
 //import GenericRecallableDialog;
 
@@ -35,12 +35,12 @@ public class Converter implements PlugInFilter {
 	float [][] array_template ;
 	float [][]image_correlation;
 	int cont = 0; int test;
-	int krad;
+	int krad; int x = 0;
 	static GenericRecallableDialog gd;
 	static ArrayDisplay origAd;
 	double  max = 0.94;
-	String directoryImages = "C:\\Documents\\Iniciação Científica\\Seleção de Imagens\\image15\\Samples\\";
-    String directoryFile = "C:\\Documents\\Iniciação Científica\\Seleção de Imagens\\image15\\";
+	String directoryImages = "C:\\Documents\\Iniciação Científica\\Seleção de Imagens\\image1\\Samples\\";
+    String directoryFile = "C:\\Documents\\Iniciação Científica\\Seleção de Imagens\\image1\\";
 
 	
 	 public int setup(String arg, ImagePlus imp) { 
@@ -57,7 +57,8 @@ public class Converter implements PlugInFilter {
     	if(file.exists()){
     		list = file.list();
     	}
-		
+    	
+ 		
 		ImageTools objeto =  new ImageTools();
 		array_original =  objeto.getCurrentImageMatrix(array_original);
 
@@ -83,20 +84,20 @@ public class Converter implements PlugInFilter {
 		//origAd.setScreenLocation(screen.width -20- gd.getSize().width - origAd.getScreenSize().width,screen.height/8);
 		image_correlation = objeto.statsCorrelation(array_original,array_template);
 		
-		for(int k=0;k<7;k++){
-			for(int i=0; i<image_correlation.length ;i++){
-				for(int j=0; j<image_correlation[0].length ;j++){
-					if(image_correlation[i][j] >= max)
-						cont++;
+		
+			for(int k=0;k<7;k++){
+				for(int i=0; i<image_correlation.length ;i++){
+					for(int j=0; j<image_correlation[0].length ;j++){
+						if(image_correlation[i][j] >= max)
+							cont++;
+					}
+				
 				}
-			}
+			FileResults.fileTemplateMatching(x,list[0],directoryFile,cont);
 			max = max + 0.01;
-			JOptionPane.showMessageDialog(null,cont);
+			x = x+1;
+			
 		}
-		JOptionPane.showMessageDialog(null,cont);
-		
-		
-
 		
 		}
 }
