@@ -48,4 +48,23 @@ public class FileResults {
     		e.printStackTrace();
     	}
 	}
+	
+	public static void fileTemplateMatching(int index, String idImage,String directoryFile, int cont){
+		FileWriter out;
+		
+		try{
+			out = new FileWriter(new File(directoryFile + "Resultados" + ".xls"),true);
+			if(index==0){
+				out.write(idImage + "\t" + "cont 0,94" + "\t" + "cont 0,95" + "\t" + "cont 0,96" + "\t"+  "cont 0,97" + "\t"+ "cont 0,98" + "\t" + "cont 0,99" + "\t" + "cont 1");
+			}
+		out.write("\t" + cont);
+		out.close();
+		}catch(IOException e){
+    		e.printStackTrace();
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}
+	
+	}
+	
 }
