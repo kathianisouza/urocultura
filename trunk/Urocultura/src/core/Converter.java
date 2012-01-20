@@ -1,5 +1,4 @@
-package core;
-
+package core; 
 
 import ij.*;
 import ij.process.*;
@@ -15,10 +14,10 @@ import java.awt.Rectangle;
 import java.io.File;
 import ij.io.FileSaver;
 import ij.io.Opener;
+import java.io.FileWriter;
+import java.io.IOException;
 import javax.swing.JOptionPane;
-import utils.FileResults;;
-
-//import GenericRecallableDialog;
+import utils.FileResults;
 
 
 
@@ -35,12 +34,11 @@ public class Converter implements PlugInFilter {
 	float [][] array_template ;
 	float [][]image_correlation;
 	int cont = 0; int test;
-	int krad; int x = 0;
+	int krad; int x=0;
 	static GenericRecallableDialog gd;
 	static ArrayDisplay origAd;
 	double  max = 0.94;
-	String directoryImages = "C:\\Documents\\Iniciação Científica\\Seleção de Imagens\\image1\\Samples\\";
-    String directoryFile = "C:\\Documents\\Iniciação Científica\\Seleção de Imagens\\image1\\";
+    String directoryFile = "C:\\Users\\Kathiani\\Documents\\Iniciação Científica\\Resultados\\";
 
 	
 	 public int setup(String arg, ImagePlus imp) { 
@@ -48,17 +46,12 @@ public class Converter implements PlugInFilter {
        		 return DOES_ALL + NO_CHANGES; 
    	 } 
 
-	public void run(ImageProcessor ip) {
+	public void run(ImageProcessor ip){
 		
-		String[] list = new String[70];
-    	File file = new File(directoryImages);
-    	Opener op = new Opener();
-    	
-    	if(file.exists()){
-    		list = file.list();
-    	}
-    	
- 		
+		ImagePlus var =  WindowManager.getCurrentImage();
+		String name =	 var.getTitle();
+		//JOptionPane.showMessageDialog(null,name);
+		
 		ImageTools objeto =  new ImageTools();
 		array_original =  objeto.getCurrentImageMatrix(array_original);
 
@@ -73,7 +66,7 @@ public class Converter implements PlugInFilter {
 			crop.displayKernel(array_template);
 		}
 		
-	      	
+	    ImageTools.filterGaussian(array_original);	
 	    ArrayDisplay origAd = new ArrayDisplay(array_original,"imagem original");
 	    ImageTools.autoSetWindowLevel();
 		image_correlation = new float[array_original.length][array_original[0].length];
@@ -93,11 +86,12 @@ public class Converter implements PlugInFilter {
 					}
 				
 				}
-			FileResults.fileTemplateMatching(x,list[0],directoryFile,cont);
+	        // JOptionPane.showMessageDialog(null,cont);
+	        FileResults.fileTemplateMatching(x,name,directoryFile,cont);
 			max = max + 0.01;
 			x = x+1;
 			
 		}
-		
-		}
+	}
 }
+	

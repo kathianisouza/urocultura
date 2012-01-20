@@ -49,15 +49,22 @@ public class FileResults {
     	}
 	}
 	
-	public static void fileTemplateMatching(int index, String idImage,String directoryFile, int cont){
+	public static void fileTemplateMatching(int index,String name,String directoryFile, int cont){
+		File file = new File(directoryFile+ "Resultado_contador.xls");
 		FileWriter out;
 		
 		try{
-			out = new FileWriter(new File(directoryFile + "Resultados" + ".xls"),true);
-			if(index==0){
-				out.write(idImage + "\t" + "cont 0,94" + "\t" + "cont 0,95" + "\t" + "cont 0,96" + "\t"+  "cont 0,97" + "\t"+ "cont 0,98" + "\t" + "cont 0,99" + "\t" + "cont 1");
+			 out =  new FileWriter(new File(directoryFile + "Resultado_contador" + ".xls"),true);
+			if(file.length()==0){
+				out.write("Nome" + "\t"  + "cont 0,94" + "\t" + "cont 0,95" + "\t" + "cont 0,96" + "\t"+  "cont 0,97" + "\t"+ "cont 0,98" + "\t" + "cont 0,99" + "\t" + "cont 1" + "\n");
 			}
-		out.write("\t" + cont);
+		if(index==0)
+			out.write(name + "\t" + cont +"\t");
+		else
+			out.write(  cont +"\t");
+		if(index==6)  
+			 out.write("\n");
+
 		out.close();
 		}catch(IOException e){
     		e.printStackTrace();
@@ -66,5 +73,4 @@ public class FileResults {
     	}
 	
 	}
-	
 }
