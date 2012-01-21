@@ -52,9 +52,9 @@ public class Counter_HC implements PlugInFilter {
 
 	public void run(ImageProcessor ip) {
 		// Lê entradas do usuário. Diretório das templates para contagem, diretório para salvar arquivo .xls
-		int i;
-		int limitCounter;
-		int threshold;
+		int i = 0;
+		int limitCounter = 55;
+		int threshold = 80;
 		
 		getParameters();
 		
@@ -66,9 +66,10 @@ public class Counter_HC implements PlugInFilter {
     		list = file.list();// Recebe o diretório de cada arquivo dentro da pasta
     	}
     	
-    	for(i = 0; i < list.length; i++){
+    	
+    	/*for(i = 0; i < list.length; i++){
     		for(threshold = 50; threshold <= 100; threshold += 5){
-    			for(limitCounter = 50; limitCounter <= 60; limitCounter += 2){
+    			for(limitCounter = 50; limitCounter <= 60; limitCounter += 2){*/
    				    
     				//Referencia imagem aberta.
     	    		imp = op.openImage(directoryImages + list[i]);
@@ -77,6 +78,7 @@ public class Counter_HC implements PlugInFilter {
     	    		//Pre processamento
     	    		ip = ip.convertToByte(true);
     	    		ip.smooth();
+    	    		imp.show();
     	    		
     	    		if(edges.compareToIgnoreCase("C") == 0){
     	    			IJ.run("Area filter...", "median=3 deriche=1 hysteresis_high=100 hysteresis_low=50");
@@ -84,13 +86,16 @@ public class Counter_HC implements PlugInFilter {
     	    		}
     	    		else{
     	    			ip.findEdges();
+    	    			imp.show();
     	    		}
     	    		
     	    		ip.threshold(threshold);
     	        	IJ.run("Convert to Mask");
+    	        	imp.show();
     	        	
     	        	if(watershed.compareToIgnoreCase("Y") == 0){
     	        		IJ.run("Watershed");
+    	        		imp.show();
     	        	}
     	        	
     	        	imageValues = (byte[])ip.getPixels();
@@ -116,13 +121,13 @@ public class Counter_HC implements PlugInFilter {
     	                
     	            // Arquiva os resultados em .xls
     	           
-    	            FileResults.fileHoughCircles(i,list[i],directoryFile,countCircles,threshold,limitCounter,watershed,edges);
+    	            //FileResults.fileHoughCircles(i,list[i],directoryFile,countCircles,threshold,limitCounter,watershed,edges);
     	                
     	            countCircles = 0;
     				
-    			}
-    		}
-    	}
+    			//}
+    		//}
+    	//}
     	JOptionPane.showMessageDialog(null,"OPERAÇÃO FINALIZADA");
 	}
 
@@ -275,19 +280,6 @@ public class Counter_HC implements PlugInFilter {
 
     }
 
-    /*void fileResults(String idImage){
-    	FileWriter out;
-    	
-    	try{
-    		out = new FileWriter(new File(directoryFile + "Resultados.xls"),true);
-    		out.write(idImage + "\t" + countCircles + "\n");
-    		out.close();
-    	}catch(IOException e){
-    		e.printStackTrace();
-    	}catch(Exception e){
-    		e.printStackTrace();
-    	}
-    }*/
 
     void getParameters(){
     	
@@ -299,6 +291,7 @@ public class Counter_HC implements PlugInFilter {
     	gd.addStringField("Save file (.xls) directory : ",directoryFile,10);
     	gd.showDialog();
     	
+    	edges = gd.getNextString();
     	watershed = gd.getNextString();
     	directoryImages = gd.getNextString();
     	directoryFile = gd.getNextString();
