@@ -3,7 +3,6 @@
  * em exames de urina. 
  */
 
-// Corrigir problema com watershed
 // Corrigir problema de arquivamento
 package core;
 
@@ -52,9 +51,9 @@ public class Counter_HC implements PlugInFilter {
 
 	public void run(ImageProcessor ip) {
 		// Lê entradas do usuário. Diretório das templates para contagem, diretório para salvar arquivo .xls
-		int i = 0;
-		int limitCounter = 55;
-		int threshold = 80;
+		int i;
+		int limitCounter;
+		int threshold;
 		
 		getParameters();
 		
@@ -67,9 +66,9 @@ public class Counter_HC implements PlugInFilter {
     	}
     	
     	
-    	/*for(i = 0; i < list.length; i++){
+    	for(i = 0; i < list.length; i++){
     		for(threshold = 50; threshold <= 100; threshold += 5){
-    			for(limitCounter = 50; limitCounter <= 60; limitCounter += 2){*/
+    			for(limitCounter = 50; limitCounter <= 60; limitCounter += 2){
    				    
     				//Referencia imagem aberta.
     	    		imp = op.openImage(directoryImages + list[i]);
@@ -78,24 +77,33 @@ public class Counter_HC implements PlugInFilter {
     	    		//Pre processamento
     	    		ip = ip.convertToByte(true);
     	    		ip.smooth();
-    	    		imp.show();
+    	    		
+    	    		imp = new ImagePlus("Smooth",ip);
+    	    		//imp.show();
     	    		
     	    		if(edges.compareToIgnoreCase("C") == 0){
     	    			IJ.run("Area filter...", "median=3 deriche=1 hysteresis_high=100 hysteresis_low=50");
-    	    			imp.show();
+    	    			IJ.selectWindow("Area Outline");
+    	    			imp = IJ.getImage();
+    	    			ip = imp.getProcessor();
     	    		}
     	    		else{
     	    			ip.findEdges();
-    	    			imp.show();
+    	    			imp = new ImagePlus("Sobel",ip);
+    	    			//imp.show();
     	    		}
     	    		
     	    		ip.threshold(threshold);
-    	        	IJ.run("Convert to Mask");
-    	        	imp.show();
+    	    		imp = new ImagePlus("Threshold",ip);
+	    			//imp.show();
+    	        	
     	        	
     	        	if(watershed.compareToIgnoreCase("Y") == 0){
     	        		IJ.run("Watershed");
-    	        		imp.show();
+    	        		imp = IJ.getImage();
+    	        		ip = imp.getProcessor();
+    	        		imp = new ImagePlus("Watershed",ip);
+    	        		//imp.show();
     	        	}
     	        	
     	        	imageValues = (byte[])ip.getPixels();
@@ -119,15 +127,15 @@ public class Counter_HC implements PlugInFilter {
     	                
     	            //JOptionPane.showMessageDialog(null,"Colônias: " + countCircles);
     	                
-    	            // Arquiva os resultados em .xls
+    	            //Arquiva os resultados em .xls
     	           
-    	            //FileResults.fileHoughCircles(i,list[i],directoryFile,countCircles,threshold,limitCounter,watershed,edges);
+    	            FileResults.fileHoughCircles(i,list[i],directoryFile,countCircles,threshold,limitCounter,watershed,edges);
     	                
     	            countCircles = 0;
     				
-    			//}
-    		//}
-    	//}
+    			}
+    		}
+    	}
     	JOptionPane.showMessageDialog(null,"OPERAÇÃO FINALIZADA");
 	}
 
