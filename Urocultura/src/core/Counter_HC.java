@@ -4,7 +4,7 @@
  */
 
 // Corrigir problema de arquivamento
-package core;
+
 
 import ij.IJ;
 import ij.ImagePlus;
@@ -16,10 +16,15 @@ import ij.process.ImageProcessor;
 
 import java.awt.Rectangle;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
-import utils.FileResults;
 
 public class Counter_HC implements PlugInFilter {
 	public int radiusMin = 10;  // Find circles with radius grater or equal radiusMin
@@ -129,7 +134,7 @@ public class Counter_HC implements PlugInFilter {
     	                
     	            //Arquiva os resultados em .xls
     	           
-    	            FileResults.fileHoughCircles(i,list[i],directoryFile,countCircles,threshold,limitCounter,watershed,edges);
+    	            fileHoughCircles(i,list[i],directoryFile,countCircles,threshold,limitCounter,watershed,edges);
     	                
     	            countCircles = 0;
     				
@@ -303,5 +308,24 @@ public class Counter_HC implements PlugInFilter {
     	watershed = gd.getNextString();
     	directoryImages = gd.getNextString();
     	directoryFile = gd.getNextString();
+    }
+
+    public void fileHoughCircles(int index, String idImage, String directoryFile, int countCircles, int threshold, int limitCounter, String watershed, String edges){
+    	FileWriter out;
+	
+    	try{
+    		out = new FileWriter(new File(directoryFile + "Resultados " + "T(" + threshold + ") " + "P(" + limitCounter + ") "
+							+ "W(" + watershed + ")" + "E(" + edges + ")" + ".xls"),true);
+    		if(index == 0){
+			out.write("Imagem" + "\t" + "Colônias" + "\t" + "Threshold" + "\t" + "Pixel" + "\t" + "Watershed" + "Edge Filter" + "\n");
+    		}
+		
+    		out.write(idImage + "\t" + countCircles + "\t" + threshold + "\t" + limitCounter + "\t" + watershed + "\t" + edges + "\n");
+    		out.close();
+    	}catch(IOException e){
+    		e.printStackTrace();
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}
     }
 }
