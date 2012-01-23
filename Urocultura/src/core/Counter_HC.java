@@ -56,9 +56,9 @@ public class Counter_HC implements PlugInFilter {
 
 	public void run(ImageProcessor ip) {
 		// Lê entradas do usuário. Diretório das templates para contagem, diretório para salvar arquivo .xls
-		int i;
-		int limitCounter;
-		int threshold;
+		int i = 0;
+		int limitCounter = 55;
+		int threshold = 80;
 		
 		getParameters();
 		
@@ -71,9 +71,9 @@ public class Counter_HC implements PlugInFilter {
     	}
     	
     	
-    	for(i = 0; i < list.length; i++){
+    	/*for(i = 0; i < list.length; i++){
     		for(threshold = 50; threshold <= 100; threshold += 5){
-    			for(limitCounter = 50; limitCounter <= 60; limitCounter += 2){
+    			for(limitCounter = 50; limitCounter <= 60; limitCounter += 2){*/
    				    
     				//Referencia imagem aberta.
     	    		imp = op.openImage(directoryImages + list[i]);
@@ -84,31 +84,35 @@ public class Counter_HC implements PlugInFilter {
     	    		ip.smooth();
     	    		
     	    		imp = new ImagePlus("Smooth",ip);
-    	    		//imp.show();
+    	    		imp.show();
     	    		
     	    		if(edges.compareToIgnoreCase("C") == 0){
     	    			IJ.run("Area filter...", "median=3 deriche=1 hysteresis_high=100 hysteresis_low=50");
+    	    			imp.close();
     	    			IJ.selectWindow("Area Outline");
     	    			imp = IJ.getImage();
     	    			ip = imp.getProcessor();
+    	    			imp.close();
     	    		}
     	    		else{
+    	    			imp.close();
     	    			ip.findEdges();
     	    			imp = new ImagePlus("Sobel",ip);
-    	    			//imp.show();
     	    		}
     	    		
     	    		ip.threshold(threshold);
     	    		imp = new ImagePlus("Threshold",ip);
-	    			//imp.show();
+	    			imp.show();
     	        	
     	        	
     	        	if(watershed.compareToIgnoreCase("Y") == 0){
     	        		IJ.run("Watershed");
     	        		imp = IJ.getImage();
     	        		ip = imp.getProcessor();
-    	        		imp = new ImagePlus("Watershed",ip);
-    	        		//imp.show();
+    	        		imp.close();
+    	        	}
+    	        	else{
+    	        		imp.close();
     	        	}
     	        	
     	        	imageValues = (byte[])ip.getPixels();
@@ -138,9 +142,9 @@ public class Counter_HC implements PlugInFilter {
     	                
     	            countCircles = 0;
     				
-    			}
-    		}
-    	}
+    			//}
+    		//}
+    	//}
     	JOptionPane.showMessageDialog(null,"OPERAÇÃO FINALIZADA");
 	}
 
