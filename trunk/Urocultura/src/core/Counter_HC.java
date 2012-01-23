@@ -7,6 +7,7 @@
 
 
 import ij.IJ;
+import ij.IJEventListener;
 import ij.ImagePlus;
 import ij.gui.GenericDialog;
 import ij.io.Opener;
@@ -70,7 +71,6 @@ public class Counter_HC implements PlugInFilter {
     		list = file.list();// Recebe o diretório de cada arquivo dentro da pasta
     	}
     	
-    	
     	/*for(i = 0; i < list.length; i++){
     		for(threshold = 50; threshold <= 100; threshold += 5){
     			for(limitCounter = 50; limitCounter <= 60; limitCounter += 2){*/
@@ -82,11 +82,10 @@ public class Counter_HC implements PlugInFilter {
     	    		//Pre processamento
     	    		ip = ip.convertToByte(true);
     	    		ip.smooth();
-    	    		
     	    		imp = new ImagePlus("Smooth",ip);
-    	    		imp.show();
     	    		
     	    		if(edges.compareToIgnoreCase("C") == 0){
+    	    			imp.show();
     	    			IJ.run("Area filter...", "median=3 deriche=1 hysteresis_high=100 hysteresis_low=50");
     	    			imp.close();
     	    			IJ.selectWindow("Area Outline");
@@ -95,25 +94,24 @@ public class Counter_HC implements PlugInFilter {
     	    			imp.close();
     	    		}
     	    		else{
-    	    			imp.close();
     	    			ip.findEdges();
     	    			imp = new ImagePlus("Sobel",ip);
     	    		}
     	    		
     	    		ip.threshold(threshold);
     	    		imp = new ImagePlus("Threshold",ip);
-	    			imp.show();
     	        	
-    	        	
-    	        	if(watershed.compareToIgnoreCase("Y") == 0){
+    	    
+	    			if(watershed.compareToIgnoreCase("Y") == 0){
+    	        		imp.show();
     	        		IJ.run("Watershed");
     	        		imp = IJ.getImage();
     	        		ip = imp.getProcessor();
     	        		imp.close();
-    	        	}
-    	        	else{
-    	        		imp.close();
-    	        	}
+	    			
+    	        		//adicionar evento, pressionar tecla "n"
+	    			}
+    	      
     	        	
     	        	imageValues = (byte[])ip.getPixels();
     	            Rectangle r = ip.getRoi();
