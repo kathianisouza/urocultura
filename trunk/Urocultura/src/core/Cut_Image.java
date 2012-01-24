@@ -1,5 +1,5 @@
 
-
+package core;
 
 import ij.ImagePlus; 
 import ij.gui.*;

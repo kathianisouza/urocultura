@@ -22,7 +22,7 @@ public class Create_A_Template_ implements PlugIn {
   
   public void run(String arg)  {
      if (arg.equals("about"))  {showAbout(); return;}
-     origimg = ImageTools.getCurrentImageMatrix(origimg);
+     origimg = ImageTools.getCurrentImageMatrix(origimg,null,null,null);
      /* Removes the original image window from the window list and dispose of it */
      ImageWindow curImgWindow = WindowManager.getCurrentWindow();
      WindowManager.removeWindow(curImgWindow);//Remove a janela especificada a partir do menu Window.
