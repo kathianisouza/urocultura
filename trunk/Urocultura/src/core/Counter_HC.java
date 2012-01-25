@@ -104,12 +104,12 @@ public class Counter_HC implements PlugInFilter {
     	    
 	    			if(watershed.compareToIgnoreCase("Y") == 0){
     	        		imp.show();
-    	        		IJ.run("Watershed");
+    	        		IJ.run("Watershed Algorithm");
+    	        		imp.close();
+    	        		IJ.selectWindow("Watershed");
     	        		imp = IJ.getImage();
     	        		ip = imp.getProcessor();
     	        		imp.close();
-	    			
-    	        		//adicionar evento, pressionar tecla "n"
 	    			}
     	      
     	        	
