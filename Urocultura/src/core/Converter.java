@@ -50,9 +50,8 @@ public class Converter implements PlugInFilter {
    	 } 
 
 	public void run(ImageProcessor ip) {
-		ImagePlus var =  WindowManager.getCurrentImage();
 		ImageTools objeto =  new ImageTools();
-		image_atual =  objeto.getCurrentImageMatrix(image_atual,c,null,null);
+		image_atual =  objeto.getCurrentImageMatrix(image_atual,5,null,null);
 		
 		String[] list = new String[100];
     	File file = new File(directoryImages);
@@ -113,6 +112,16 @@ public class Converter implements PlugInFilter {
 	JOptionPane.showMessageDialog(null,"Processo finalizado!");
 
 	}
+	
+	/*public static void  FiltroGauss(){
+	double sigmaX = sigmaScaled ? sigma/imp.getCalibration().pixelWidth : sigma;
+    double sigmaY = sigmaScaled ? sigma/imp.getCalibration().pixelHeight : sigma;
+    double accuracy = (ip instanceof ByteProcessor || ip instanceof ColorProcessor) ?
+    BYTE_ACCURACY : (ip instanceof ShortProcessor ? SHORT_ACCURACY : FLOAT_ACCURACY);
+   	Rectangle roi = ip.getRoi();
+	Rectangle roi = ip.getRoi();
+	
+	}*/
 
 
 }
