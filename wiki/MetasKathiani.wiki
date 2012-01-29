@@ -1,12 +1,12 @@
 ===  METAS EM ABERTO JANEIRO (09/01)===
     * Realizar experimentos com :
-    - Template fixo(ED).
+    - Template fixo(F).
 
     - Template Circular;
 
     - Filtro Gaussiano(ED);
 
-    - Intervalo para controle do contador(ED);
+    - Intervalo para controle do contador(F);
 
 
 
