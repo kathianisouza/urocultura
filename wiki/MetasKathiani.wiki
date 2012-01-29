@@ -4,9 +4,9 @@
 
     - Template Circular (ED);
 
-    - Filtro Gaussiano(ED);
+    - Filtro Gaussiano (ED);
 
-    - Intervalo para controle do contador*(F)*;
+    - Intervalo para controle do contador  *(F)*;
 
 
 
