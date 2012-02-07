@@ -43,6 +43,7 @@ public class Counter_HC implements PlugInFilter {
     int lut[][][]; // LookUp Table for rsin e rcos values
 
     int countCircles;
+    String smooth = "G";
     String edges = "S";
     String watershed = "N";
     String directoryImages = "D:\\Documentos\\SI - UFGD\\Projeto Automatização na Contagem de Colônias\\Templates\\image1\\Samples\\";
@@ -71,9 +72,9 @@ public class Counter_HC implements PlugInFilter {
     		list = file.list();// Recebe o diretório de cada arquivo dentro da pasta
     	}
     	
-    	/*for(i = 0; i < list.length; i++){
+    	for(i = 0; i < list.length; i++){
     		for(threshold = 50; threshold <= 100; threshold += 5){
-    			for(limitCounter = 50; limitCounter <= 60; limitCounter += 2){*/
+    			for(limitCounter = 50; limitCounter <= 60; limitCounter += 2){
    				    
     				//Referencia imagem aberta.
     	    		imp = op.openImage(directoryImages + list[i]);
@@ -81,8 +82,16 @@ public class Counter_HC implements PlugInFilter {
     	    		
     	    		//Pre processamento
     	    		ip = ip.convertToByte(true);
-    	    		ip.smooth();
-    	    		imp = new ImagePlus("Smooth",ip);
+    	    		if(smooth.compareToIgnoreCase("S") == 0){
+    	    			ip.smooth();
+        	    		imp = new ImagePlus("Smooth",ip);
+    	    		}
+    	    		else{
+    	    			imp.show();
+    	    			IJ.run("Accurate Gaussian Blur", "sigma=2");
+    	    			ip = imp.getProcessor();
+    	    			imp.close();
+    	    		}
     	    		
     	    		if(edges.compareToIgnoreCase("C") == 0){
     	    			imp.show();
@@ -132,17 +141,16 @@ public class Counter_HC implements PlugInFilter {
     	        	
     	            getCenterPoints(limitCounter);
     	                
-    	            //JOptionPane.showMessageDialog(null,"Colônias: " + countCircles);
     	                
     	            //Arquiva os resultados em .xls
     	           
-    	            fileHoughCircles(i,list[i],directoryFile,countCircles,threshold,limitCounter,watershed,edges);
+    	            fileHoughCircles(i,list[i],directoryFile,countCircles,threshold,limitCounter,watershed,edges,smooth);
     	                
     	            countCircles = 0;
     				
-    			//}
-    		//}
-    	//}
+    			}
+    		}
+    	}
     	JOptionPane.showMessageDialog(null,"OPERAÇÃO FINALIZADA");
 	}
 
@@ -300,29 +308,31 @@ public class Counter_HC implements PlugInFilter {
     	
     	GenericDialog gd = new GenericDialog("Parameters");
     	
-    	gd.addStringField("Edge Filter. Canny(C)/ Sobel(S): ",edges,5);
+    	gd.addStringField("Smooth Filter. Smooth(S) / Gaussian(G): ", smooth, 5);
+    	gd.addStringField("Edge Filter. Canny(C) / Sobel(S): ",edges,5);
     	gd.addStringField("Watershed (Y)/(N): ",watershed,5);
     	gd.addStringField("Templates directory: ",directoryImages,10);
     	gd.addStringField("Save file (.xls) directory : ",directoryFile,10);
     	gd.showDialog();
     	
+    	smooth = gd.getNextString();
     	edges = gd.getNextString();
     	watershed = gd.getNextString();
     	directoryImages = gd.getNextString();
     	directoryFile = gd.getNextString();
     }
 
-    public void fileHoughCircles(int index, String idImage, String directoryFile, int countCircles, int threshold, int limitCounter, String watershed, String edges){
+    public void fileHoughCircles(int index, String idImage, String directoryFile, int countCircles, int threshold, int limitCounter, String watershed, String edges, String smooth){
     	FileWriter out;
 	
     	try{
-    		out = new FileWriter(new File(directoryFile + "Resultados " + "T(" + threshold + ") " + "P(" + limitCounter + ") "
+    		out = new FileWriter(new File(directoryFile + "Resultados " + "S(" + smooth + ") " + "T(" + threshold + ") " + "P(" + limitCounter + ") "
 							+ "W(" + watershed + ")" + "E(" + edges + ")" + ".xls"),true);
     		if(index == 0){
-			out.write("Imagem" + "\t" + "Colônias" + "\t" + "Threshold" + "\t" + "Pixel" + "\t" + "Watershed" + "Edge Filter" + "\n");
+			out.write("Imagem" + "\t" + "Colônias" + "\t" + "Smooth" + "\t" + "Threshold" + "\t" + "Pixel" + "\t" + "Watershed" + "Edge Filter" + "\n");
     		}
 		
-    		out.write(idImage + "\t" + countCircles + "\t" + threshold + "\t" + limitCounter + "\t" + watershed + "\t" + edges + "\n");
+    		out.write(idImage + "\t" + countCircles + "\t" + smooth + "\t" + threshold + "\t" + limitCounter + "\t" + watershed + "\t" + edges + "\n");
     		out.close();
     	}catch(IOException e){
     		e.printStackTrace();
