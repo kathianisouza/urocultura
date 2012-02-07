@@ -11,6 +11,7 @@ import ij.gui.*;
 import ij.io.*;
 import ij.process.*;
 import ij.measure.*;
+import ij.plugin.filter.GaussianBlur;
 import ij.plugin.filter.ParticleAnalyzer;
 import ij.plugin.frame.*;  // need for contrastAdjuster
 import javax.swing.JOptionPane;
@@ -189,16 +190,16 @@ public static void scale(short[][][] A, int minval, int maxval) {
 public static void scale(float[][] A) {
 scale(A, 0, 255);
 }
-public static void scale(float[][] A, float min, float max) {
-int n = A.length;
-int m = A[0].length;
-float Amin = min(A);
-float Amax = max(A);
-float scale = (max-min)/(Amax-Amin);
-for (int i=0; i<n; i++) 
-  for (int j=0; j<m; j++) 
-     A[i][j] = min + (A[i][j] - Amin)*scale;
-}
+	public static void scale(float[][] A, float min, float max) {
+	int n = A.length;
+	int m = A[0].length;
+	float Amin = min(A);
+	float Amax = max(A);
+	float scale = (max-min)/(Amax-Amin);
+	for (int i=0; i<n; i++) 
+	  for (int j=0; j<m; j++) 
+	     A[i][j] = min + (A[i][j] - Amin)*scale;
+	}
 
 // normalizs an arrays values (e.g. for a kernel)
 // does not do vector normalization
@@ -396,6 +397,8 @@ if (useRoi && roi!=null) { // get just the Roi
     ImgTLx = 0;   ImgTLy = 0; //coordenadas que  no caso começam com 0 pois não existe roi selecionada
  }
  ImageProcessor ip = imp.getProcessor();
+ GaussianBlur filtro = new GaussianBlur();
+ filtro.blur(ip,12);
  float[][] A = new float[ImgWidth][ImgHeight];
  for(int w=0; w<ImgWidth; w++)
    for(int h=0; h<ImgHeight; h++) 
@@ -500,17 +503,15 @@ static public float[][] calcCircKernel(int krad) {
 } // end calCircKernel
    
 // assumes original kernel min==0
-static public float[][] invertKernel(float[][] A) {
-int width = A.length;
-int height = A[0].length;
-for (int w=0; w<width; w++) 
-  for (int h=0; h<height; h++) 
-     A[w][h] *= -1f;
-scale(A); // scale it 0..255
-normalize(A);
-return A;
-}
-
+ static public void invertKernel(float[][] A) {
+    int width = A.length;
+    int height = A[0].length;
+    for (int w=0; w<width; w++) 
+      for (int h=0; h<height; h++) 
+         A[w][h] *= -1f;
+    scale(A); // scale it 0..255
+    normalize(A);
+ }
 // WO 5/9/02 area under an arc: arc eqn: y^2 = sqrt(R^2 - x^2)
 // area = integral{ sqrt(R^2 - x^2)  dx}
 public static float areaIntegral(float x, float R) {
