@@ -1,14 +1,17 @@
+===  METAS EM ABERTO (07/02 - 14/02) ===
+     
+   * Utilizar o plugin Analyse Particles do ImageJ para contar as colônias e verificar seu desempenho * (ED) * .
+   
+     
+
 ===  METAS EM ABERTO JANEIRO (09/01)===
+
     * Realizar experimentos com :
     - Template fixo *(F)*.
-
-    - Template Circular (ED);
 
     - Filtro Gaussiano *(F)*.
 
     - Intervalo para controle do contador  *(F)*.
-
-
 
 
 === METAS EM ABERTO NOVEMBRO (29/11-06/12) ===
@@ -38,17 +41,6 @@
 
     * Criação do gerador de amostras. *(F)*
     * Geração e organização das amostras de urocultura. *(F)*
-
-
-
-
-
-
-
-
-
-
-
 
 
 
