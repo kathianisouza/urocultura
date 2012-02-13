@@ -1,6 +1,8 @@
 ===  METAS EM ABERTO (07/02 - 14/02) ===
+
+   * Aplicar filtro Gaussiano nas imagens através do  método blur da classe GaussianBlur, variando os valores de raio de 4 a 8, antes de aplicar o analisador de partículas   *(ED) *.  
      
-   * Utilizar o plugin Analyse Particles do ImageJ para contar as colônias e verificar seu desempenho * (ED) * .
+   * Utilizar o plugin Analyse Particles do ImageJ para contar as colônias e verificar seu desempenho * (F) * .
    
      
 
