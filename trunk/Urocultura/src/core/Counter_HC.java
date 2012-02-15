@@ -3,8 +3,6 @@
  * em exames de urina. 
  */
 
-// Corrigir problema de arquivamento
-
 
 import ij.IJ;
 import ij.IJEventListener;
@@ -61,76 +59,77 @@ public class Counter_HC implements PlugInFilter {
 		int i = 0;
 		int limitCounter = 55;
 		int threshold = 80;
-		
+						
 		getParameters();
-		
+						
 		String[] list = new String[100];
-    	File file = new File(directoryImages);
-    	Opener op = new Opener();
-    	
-    	if(file.exists()){
-    		list = file.list();// Recebe o diretório de cada arquivo dentro da pasta
-    	}
-    	
-    	for(i = 0; i < list.length; i++){
-    		for(threshold = 50; threshold <= 100; threshold += 5){
-    			for(limitCounter = 50; limitCounter <= 60; limitCounter += 2){
-   				    
-    				//Referencia imagem aberta.
-    	    		imp = op.openImage(directoryImages + list[i]);
-    	    		ip = imp.getProcessor();
-    	    		
-    	    		//Pre processamento
-    	    		ip = ip.convertToByte(true);
-    	    		if(smooth.compareToIgnoreCase("S") == 0){
-    	    			ip.smooth();
-        	    		imp = new ImagePlus("Smooth",ip);
-    	    		}
-    	    		else{
-    	    			imp.show();
-    	    			IJ.run("Accurate Gaussian Blur", "sigma=2");
-    	    			ip = imp.getProcessor();
+		File file = new File(directoryImages);
+		Opener op = new Opener();
+				    	
+		if(file.exists()){
+			list = file.list();// Recebe o diretório de cada arquivo dentro da pasta
+		}
+				    	
+		for(i = 0; i < list.length; i++){
+			/*for(threshold = 50; threshold <= 100; threshold += 10){
+			   	for(limitCounter = 50; limitCounter <= 60; limitCounter += 2){*/
+				   				    
+		     		//Referencia imagem aberta.
+		     	    imp = op.openImage(directoryImages + list[i]);
+					ip = imp.getProcessor();
+				    	    		
+			  	    //Pre processamento
+					ip = ip.convertToByte(true);
+				    		
+				    if(smooth.compareToIgnoreCase("S") == 0){
+						ip.smooth();
+						imp = new ImagePlus("Smooth",ip);
+				   	}
+			 	    else{
+				       	imp.show();
+				    	IJ.run("Accurate Gaussian Blur", "sigma=2");
+			  			ip = imp.getProcessor();
     	    			imp.close();
-    	    		}
-    	    		
-    	    		if(edges.compareToIgnoreCase("C") == 0){
-    	    			imp.show();
-    	    			IJ.run("Area filter...", "median=3 deriche=1 hysteresis_high=100 hysteresis_low=50");
-    	    			imp.close();
-    	    			IJ.selectWindow("Area Outline");
-    	    			imp = IJ.getImage();
-    	    			ip = imp.getProcessor();
-    	    			imp.close();
-    	    		}
-    	    		else{
-    	    			ip.findEdges();
-    	    			imp = new ImagePlus("Sobel",ip);
-    	    		}
-    	    		
-    	    		ip.threshold(threshold);
-    	    		imp = new ImagePlus("Threshold",ip);
-    	        	
-    	    
-	    			if(watershed.compareToIgnoreCase("Y") == 0){
-    	        		imp.show();
-    	        		IJ.run("Watershed Algorithm");
-    	        		imp.close();
-    	        		IJ.selectWindow("Watershed");
-    	        		imp = IJ.getImage();
-    	        		ip = imp.getProcessor();
-    	        		imp.close();
-	    			}
-    	      
-    	        	
-    	        	imageValues = (byte[])ip.getPixels();
-    	            Rectangle r = ip.getRoi();
-    	        		
-    	            offx = r.x;
-    	            offy = r.y;
-    	            width = r.width;
-    	            height = r.height;
-    	            offset = ip.getWidth();
-    	            depth = ((radiusMax-radiusMin)/radiusInc)+1;
+			  	    }
+				    	    		
+		    	    if(edges.compareToIgnoreCase("C") == 0){
+			   	    	imp.show();
+			   	    	IJ.run("Area filter...", "median=3 deriche=1 hysteresis_high=100 hysteresis_low=50");
+			   	    	imp.close();
+			   	    	IJ.selectWindow("Area Outline");
+			   	    	imp = IJ.getImage();
+		    	    	ip = imp.getProcessor();
+			   	    	imp.close();
+			  	    }
+			  	    else{
+			 	    	ip.findEdges();
+				       	imp = new ImagePlus("Sobel",ip);
+		    	    }
+				    	    		
+		    	    ip.threshold(threshold);
+			   	    imp = new ImagePlus("Threshold",ip);
+				    	        	
+				    	    
+			    	if(watershed.compareToIgnoreCase("Y") == 0){
+		    	        imp.show();
+			  	        IJ.run("Watershed Algorithm");
+			   	        imp.close();
+			   	        IJ.selectWindow("Watershed");
+		    	        imp = IJ.getImage();
+		    	        ip = imp.getProcessor();
+		    	        imp.close();
+			    	}
+				    	      
+				    	        	
+		    	    imageValues = (byte[])ip.getPixels();
+		    	    Rectangle r = ip.getRoi();
+				    	        		
+		    	    offx = r.x;
+			   	    offy = r.y;
+		    	    width = r.width;
+				    height = r.height;
+				    offset = ip.getWidth();
+				    depth = ((radiusMax-radiusMin)/radiusInc)+1;
     	    			
     	            houghTransform();
 
@@ -148,8 +147,8 @@ public class Counter_HC implements PlugInFilter {
     	                
     	            countCircles = 0;
     				
-    			}
-    		}
+    			//}
+    		//}
     	}
     	JOptionPane.showMessageDialog(null,"OPERAÇÃO FINALIZADA");
 	}
@@ -302,8 +301,7 @@ public class Counter_HC implements PlugInFilter {
         }
 
     }
-
-
+    
     void getParameters(){
     	
     	GenericDialog gd = new GenericDialog("Parameters");
