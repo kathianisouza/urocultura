@@ -1,5 +1,5 @@
 #ImageJ 1.44p Preferences
-#Wed Feb 15 21:04:00 BRST 2012
+#Thu Feb 16 16:39:02 BRST 2012
 menu.size=14
 fps=7.0
 new.type=0

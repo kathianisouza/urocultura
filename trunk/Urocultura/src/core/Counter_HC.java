@@ -12,6 +12,7 @@ import ij.io.Opener;
 import ij.plugin.filter.PlugInFilter;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
+import ij.WindowManager;
 
 import java.awt.Rectangle;
 import java.io.File;
@@ -56,27 +57,24 @@ public class Counter_HC implements PlugInFilter {
 
 	public void run(ImageProcessor ip) {
 		// Lê entradas do usuário. Diretório das templates para contagem, diretório para salvar arquivo .xls
-		int i = 0;
-		int limitCounter = 55;
-		int threshold = 80;
 						
 		getParameters();
 						
 		String[] list = new String[100];
 		File file = new File(directoryImages);
-		Opener op = new Opener();
+		
 				    	
 		if(file.exists()){
 			list = file.list();// Recebe o diretório de cada arquivo dentro da pasta
 		}
 				    	
-		for(i = 0; i < list.length; i++){
-			/*for(threshold = 50; threshold <= 100; threshold += 10){
-			   	for(limitCounter = 50; limitCounter <= 60; limitCounter += 2){*/
+		pre_processing1(list,ip);
+		
+		
+			   	
 				   				    
-		     		//Referencia imagem aberta.
-		     	    imp = op.openImage(directoryImages + list[i]);
-					ip = imp.getProcessor();
+		     		
+					/*ip = imp.getProcessor();
 				    	    		
 			  	    //Pre processamento
 					ip = ip.convertToByte(true);
@@ -145,11 +143,8 @@ public class Counter_HC implements PlugInFilter {
     	           
     	            fileHoughCircles(i,list[i],directoryFile,countCircles,threshold,limitCounter,watershed,edges,smooth);
     	                
-    	            countCircles = 0;
-    				
-    			//}
-    		//}
-    	}
+    	            countCircles = 0;*/
+    		
     	JOptionPane.showMessageDialog(null,"OPERAÇÃO FINALIZADA");
 	}
 
@@ -300,6 +295,44 @@ public class Counter_HC implements PlugInFilter {
             }
         }
 
+    }
+    
+    void pre_processing1(String[] list, ImageProcessor ip){
+    	
+    	int threshold;
+    	
+    	Opener op = new Opener();
+    	
+    	for(int i = 0; i < list.length; i++){
+			for(threshold = 50; threshold <= 100; threshold += 10){
+    
+				//Referencia imagem aberta.
+	     	    imp = op.openImage(directoryImages + list[i]);
+	     	    WindowManager.setTempCurrentImage(imp);
+	     	    
+	     	    IJ.run("8-bit");
+	     	    IJ.run("Smooth");
+	     	    IJ.run("Find Edges");
+	     	    
+	     	    ip = imp.getProcessor();
+	     	    ip.threshold(threshold);
+	     	    
+	     	    imp = new ImagePlus("Threshold",ip);
+	     	    WindowManager.setTempCurrentImage(imp);
+	     	    
+	     	    IJ.run("Analyze Particles...", "size=0-Infinity circularity=0.00-1.00 show=Outlines display exclude clear");
+			}
+    	}
+    }
+    
+    void pre_processing2(){
+    	
+    	
+    }
+    
+    void pre_processing3(){
+    	
+    	
     }
     
     void getParameters(){
