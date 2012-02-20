@@ -9,11 +9,13 @@ import ij.IJEventListener;
 import ij.ImagePlus;
 import ij.gui.GenericDialog;
 import ij.io.Opener;
+import ij.plugin.filter.ParticleAnalyzer;
 import ij.plugin.filter.PlugInFilter;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
 import ij.WindowManager;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileWriter;
@@ -41,10 +43,12 @@ public class Counter_HC implements PlugInFilter {
     public int offy;   // ROI y offset
     int lut[][][]; // LookUp Table for rsin e rcos values
 
+    Point centerPoint[];
+    int threshold;
     int countCircles;
-    String smooth = "G";
-    String edges = "S";
-    String watershed = "N";
+    int dadosHough[];
+    
+    String preprocessing = "2";
     String directoryImages = "D:\\Documentos\\SI - UFGD\\Projeto Automatização na Contagem de Colônias\\Templates\\image1\\Samples\\";
     String directoryFile = "D:\\Documentos\\SI - UFGD\\Projeto Automatização na Contagem de Colônias\\Templates\\image1\\";
     
@@ -67,83 +71,46 @@ public class Counter_HC implements PlugInFilter {
 		if(file.exists()){
 			list = file.list();// Recebe o diretório de cada arquivo dentro da pasta
 		}
-				    	
-		pre_processing1(list,ip);
 		
-		
-			   	
-				   				    
-		     		
-					/*ip = imp.getProcessor();
-				    	    		
-			  	    //Pre processamento
-					ip = ip.convertToByte(true);
-				    		
-				    if(smooth.compareToIgnoreCase("S") == 0){
-						ip.smooth();
-						imp = new ImagePlus("Smooth",ip);
-				   	}
-			 	    else{
-				       	imp.show();
-				    	IJ.run("Accurate Gaussian Blur", "sigma=2");
-			  			ip = imp.getProcessor();
-    	    			imp.close();
-			  	    }
-				    	    		
-		    	    if(edges.compareToIgnoreCase("C") == 0){
-			   	    	imp.show();
-			   	    	IJ.run("Area filter...", "median=3 deriche=1 hysteresis_high=100 hysteresis_low=50");
-			   	    	imp.close();
-			   	    	IJ.selectWindow("Area Outline");
-			   	    	imp = IJ.getImage();
-		    	    	ip = imp.getProcessor();
-			   	    	imp.close();
-			  	    }
-			  	    else{
-			 	    	ip.findEdges();
-				       	imp = new ImagePlus("Sobel",ip);
-		    	    }
-				    	    		
-		    	    ip.threshold(threshold);
-			   	    imp = new ImagePlus("Threshold",ip);
+    	
+    	Opener op = new Opener();
+   
+    	//pre_processing1(list,ip);
+	     	    
+	    if(preprocessing.compareToIgnoreCase("2") == 0){
+	    	for(int i = 0; i < list.length; i++){
+	    		for(float sigma = (float) 1.4; sigma <= (float) 1.8; sigma += 0.1){
+	     	    	for(float alpha = (float) 0.8; alpha <= (float) 1.3; alpha += 0.1){
+	     	    		for(threshold = 16; threshold <= 22; threshold++){
+	     	    			//float sigma = (float) 1.4;
+	     	    			//float alpha = (float) 1.1;
+	     	    			
+	    					imp = op.openImage(directoryImages + list[i]);
+	     	    			WindowManager.setTempCurrentImage(imp);
+	    	     	    	
+	     	    			pre_processing2(sigma,alpha);
+	     	    			ip = imp.getProcessor();
+	     	    			imp.close();
+	     	    			houghProcess(ip);
+	     	    		
+	     	    			FileResults.fileHoughCircles(i,list[i],directoryFile,countCircles,sigma,alpha,threshold);
+    	                
+	    	    	     	countCircles = 0;
+	     	    		}
+	     	    	}
+	     	    }
+	     	}
+	    }
+	     	    
+	    if(preprocessing.compareToIgnoreCase("3") == 0){
+	    	pre_processing3();
+	     	    	
+	     	ip = imp.getProcessor();
+	     	imp.close();
+	     	houghProcess(ip);
+	    }
 				    	        	
-				    	    
-			    	if(watershed.compareToIgnoreCase("Y") == 0){
-		    	        imp.show();
-			  	        IJ.run("Watershed Algorithm");
-			   	        imp.close();
-			   	        IJ.selectWindow("Watershed");
-		    	        imp = IJ.getImage();
-		    	        ip = imp.getProcessor();
-		    	        imp.close();
-			    	}
-				    	      
-				    	        	
-		    	    imageValues = (byte[])ip.getPixels();
-		    	    Rectangle r = ip.getRoi();
-				    	        		
-		    	    offx = r.x;
-			   	    offy = r.y;
-		    	    width = r.width;
-				    height = r.height;
-				    offset = ip.getWidth();
-				    depth = ((radiusMax-radiusMin)/radiusInc)+1;
-    	    			
-    	            houghTransform();
-
-    	            // Create image View for Hough Transform.
-    	            ImageProcessor newip = new ByteProcessor(width, height);
-    	            byte[] newpixels = (byte[])newip.getPixels();
-    	            createHoughPixels(newpixels);
-    	        	
-    	            getCenterPoints(limitCounter);
-    	                
-    	                
-    	            //Arquiva os resultados em .xls
-    	           
-    	            fileHoughCircles(i,list[i],directoryFile,countCircles,threshold,limitCounter,watershed,edges,smooth);
-    	                
-    	            countCircles = 0;*/
+		    	    
     		
     	JOptionPane.showMessageDialog(null,"OPERAÇÃO FINALIZADA");
 	}
@@ -222,26 +189,26 @@ public class Counter_HC implements PlugInFilter {
         }
     }
 
-    private void getCenterPoints(int limitCounter) {
-
-
+    void getCenterPoints() {
+        dadosHough = new int[500];
+        int cont = 0;
+        centerPoint = new Point[500];
         int xMax = 0;
         int yMax = 0;
         int rMax = 0;
-        
-        double counterMax = -1;
+        boolean flag = true;
 
-        do{
-            counterMax = -1;
+        inicializaVetor(dadosHough);
+
+        while( flag ){
+            double counterMax = -1;
             for(int radius = radiusMin;radius <= radiusMax;radius = radius+radiusInc) {
-
 
                 int indexR = (radius-radiusMin)/radiusInc;
                 for(int y = 0; y < height; y++) {
                     for(int x = 0; x < width; x++) {
                         if(houghValues[x][y][indexR] > counterMax) {
-                            counterMax = houghValues[x][y][indexR]; 
-                            
+                            counterMax = houghValues[x][y][indexR];
                             xMax = x;
                             yMax = y;
                             rMax = radius;
@@ -249,11 +216,18 @@ public class Counter_HC implements PlugInFilter {
                     }
                 }
             }
-            
-            countCircles += 1;
-            clearNeighbours(xMax,yMax,rMax); 
-            
-        }while(counterMax > limitCounter);   // ajustar condição de parada
+            if( counterMax > threshold && countCircles < 500 && cont < 495) {
+                    dadosHough[cont++] = xMax;
+                    dadosHough[cont++] = yMax;
+                    dadosHough[cont++] = rMax;
+
+                    centerPoint[countCircles ++] = new Point (xMax, yMax);
+
+                    clearNeighbours(xMax,yMax,rMax);
+            } else {
+                    flag = false;
+            }
+        }
     }
 
     private void clearNeighbours(int x,int y, int radius) {
@@ -297,14 +271,34 @@ public class Counter_HC implements PlugInFilter {
 
     }
     
-    void pre_processing1(String[] list, ImageProcessor ip){
+    void houghProcess(ImageProcessor ip){
+    	imageValues = (byte[])ip.getPixels();
+	    Rectangle r = ip.getRoi();
+	    	        		
+	    offx = r.x;
+   	    offy = r.y;
+	    width = r.width;
+	    height = r.height;
+	    offset = ip.getWidth();
+	    depth = ((radiusMax-radiusMin)/radiusInc)+1;
+			
+        houghTransform();
+
+        // Create image View for Hough Transform.
+        ImageProcessor newip = new ByteProcessor(width, height);
+        byte[] newpixels = (byte[])newip.getPixels();
+        createHoughPixels(newpixels);
     	
-    	int threshold;
+        getCenterPoints();
+    }
+    
+    
+    void pre_processing1(String[] list, ImageProcessor ip){
     	
     	Opener op = new Opener();
     	
     	for(int i = 0; i < list.length; i++){
-			for(threshold = 50; threshold <= 100; threshold += 10){
+			//for(threshold = 50; threshold <= 100; threshold += 10){
     
 				//Referencia imagem aberta.
 	     	    imp = op.openImage(directoryImages + list[i]);
@@ -317,58 +311,71 @@ public class Counter_HC implements PlugInFilter {
 	     	    ip = imp.getProcessor();
 	     	    ip.threshold(threshold);
 	     	    
-	     	    imp = new ImagePlus("Threshold",ip);
-	     	    WindowManager.setTempCurrentImage(imp);
+	     	    /*imp = new ImagePlus("Threshold",ip);
+	     	    WindowManager.setTempCurrentImage(imp);*/
 	     	    
-	     	    IJ.run("Analyze Particles...", "size=0-Infinity circularity=0.00-1.00 show=Outlines display exclude clear");
-			}
+	     	    ParticleAnalyzer pa = new ParticleAnalyzer();
+	     	    pa.run(ip);
+	     	    /*int resultado = pa.SHOW_RESULTS;
+	     	    
+	     	    JOptionPane.showMessageDialog(null, resultado);*/
+	     	    
+			//}
     	}
     }
     
-    void pre_processing2(){
+    void pre_processing2(float sigma, float alpha){
     	
+    	Image_Edge canny = new Image_Edge();
     	
+    	IJ.run("Enhance Contrast", "saturated=2");
+	    IJ.run("Gaussian Blur...", "sigma="+sigma);
+	    IJ.run("8-bit");
+	     	    
+	    canny.setAlpha(alpha);
+	    canny.EdgeDetection(imp);
+	     	    
+	    IJ.selectWindow("Area Outline");
+	   	imp = IJ.getImage();
     }
     
     void pre_processing3(){
     	
+    	float alpha = (float) 1.2;
     	
+    	Image_Edge canny = new Image_Edge();
+    
+    	IJ.run("8-bit");
+    	IJ.run("Gaussian Blur...", "sigma=1.30");
+    	
+    	canny.setAlpha(alpha);
+	    canny.EdgeDetection(imp);
+	    IJ.selectWindow("Area Outline");
+	    imp = IJ.getImage();
+	    
+	    WindowManager.closeAllWindows();
+	    WindowManager.setTempCurrentImage(imp);
+	    
+	    IJ.run("Watershed");
+    }
+    
+    private void inicializaVetor( int[] vet){
+        for( int i = 0; i < vet.length; i ++ ){
+                vet[i] = -1;
+        }
     }
     
     void getParameters(){
     	
     	GenericDialog gd = new GenericDialog("Parameters");
     	
-    	gd.addStringField("Smooth Filter. Smooth(S) / Gaussian(G): ", smooth, 5);
-    	gd.addStringField("Edge Filter. Canny(C) / Sobel(S): ",edges,5);
-    	gd.addStringField("Watershed (Y)/(N): ",watershed,5);
+    	gd.addStringField("Preprocessing choice [1],[2],[3]: ",preprocessing,02);
     	gd.addStringField("Templates directory: ",directoryImages,10);
     	gd.addStringField("Save file (.xls) directory : ",directoryFile,10);
     	gd.showDialog();
     	
-    	smooth = gd.getNextString();
-    	edges = gd.getNextString();
-    	watershed = gd.getNextString();
+    	preprocessing = gd.getNextString();
     	directoryImages = gd.getNextString();
     	directoryFile = gd.getNextString();
-    }
-
-    public void fileHoughCircles(int index, String idImage, String directoryFile, int countCircles, int threshold, int limitCounter, String watershed, String edges, String smooth){
-    	FileWriter out;
-	
-    	try{
-    		out = new FileWriter(new File(directoryFile + "Resultados " + "S(" + smooth + ") " + "T(" + threshold + ") " + "P(" + limitCounter + ") "
-							+ "W(" + watershed + ")" + "E(" + edges + ")" + ".xls"),true);
-    		if(index == 0){
-			out.write("Imagem" + "\t" + "Colônias" + "\t" + "Smooth" + "\t" + "Threshold" + "\t" + "Pixel" + "\t" + "Watershed" + "Edge Filter" + "\n");
-    		}
-		
-    		out.write(idImage + "\t" + countCircles + "\t" + smooth + "\t" + threshold + "\t" + limitCounter + "\t" + watershed + "\t" + edges + "\n");
-    		out.close();
-    	}catch(IOException e){
-    		e.printStackTrace();
-    	}catch(Exception e){
-    		e.printStackTrace();
-    	}
     }
 }
