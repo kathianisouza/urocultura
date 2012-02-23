@@ -75,7 +75,31 @@ public class Counter_HC implements PlugInFilter {
     	
     	Opener op = new Opener();
    
-    	//pre_processing1(list,ip);
+	     	    
+	    if(preprocessing.compareToIgnoreCase("1") == 0){
+	    	for(int i = 0; i < list.length; i++){
+	    		for(float sigma = (float) 1.4; sigma <= (float) 1.8; sigma += 0.1){
+	     	    	for(float alpha = (float) 0.8; alpha <= (float) 1.3; alpha += 0.1){
+	     	    		for(threshold = 16; threshold <= 22; threshold++){
+	     	    			//float sigma = (float) 1.4;
+	     	    			//float alpha = (float) 1.1;
+	     	    			
+	    					imp = op.openImage(directoryImages + list[i]);
+	     	    			WindowManager.setTempCurrentImage(imp);
+	    	     	    	
+	     	    			pre_processing1(sigma,alpha);
+	     	    			ip = imp.getProcessor();
+	     	    			imp.close();
+	     	    			houghProcess(ip);
+	     	    		
+	     	    			FileResults.fileHoughCircles(i,list[i],directoryFile,countCircles,sigma,alpha,threshold);
+    	                
+	    	    	     	countCircles = 0;
+	     	    		}
+	     	    	}
+	     	    }
+	     	}
+	    }
 	     	    
 	    if(preprocessing.compareToIgnoreCase("2") == 0){
 	    	for(int i = 0; i < list.length; i++){
@@ -93,21 +117,13 @@ public class Counter_HC implements PlugInFilter {
 	     	    			imp.close();
 	     	    			houghProcess(ip);
 	     	    		
-	     	    			FileResults.fileHoughCircles(i,list[i],directoryFile,countCircles,sigma,alpha,threshold);
+	     	    			FileResults.fileHoughCircles2(i,list[i],directoryFile,countCircles,sigma,alpha,threshold);
     	                
 	    	    	     	countCircles = 0;
 	     	    		}
 	     	    	}
 	     	    }
 	     	}
-	    }
-	     	    
-	    if(preprocessing.compareToIgnoreCase("3") == 0){
-	    	pre_processing3();
-	     	    	
-	     	ip = imp.getProcessor();
-	     	imp.close();
-	     	houghProcess(ip);
 	    }
 				    	        	
 		    	    
@@ -293,7 +309,7 @@ public class Counter_HC implements PlugInFilter {
     }
     
     
-    void pre_processing1(String[] list, ImageProcessor ip){
+    /*void pre_processing1(String[] list, ImageProcessor ip){
     	
     	Opener op = new Opener();
     	
@@ -311,17 +327,32 @@ public class Counter_HC implements PlugInFilter {
 	     	    ip = imp.getProcessor();
 	     	    ip.threshold(threshold);
 	     	    
-	     	    /*imp = new ImagePlus("Threshold",ip);
-	     	    WindowManager.setTempCurrentImage(imp);*/
+	     	    imp = new ImagePlus("Threshold",ip);
+	     	    WindowManager.setTempCurrentImage(imp);
 	     	    
 	     	    ParticleAnalyzer pa = new ParticleAnalyzer();
 	     	    pa.run(ip);
-	     	    /*int resultado = pa.SHOW_RESULTS;
+	     	    int resultado = pa.SHOW_RESULTS;
 	     	    
-	     	    JOptionPane.showMessageDialog(null, resultado);*/
+	     	    JOptionPane.showMessageDialog(null, resultado);
 	     	    
 			//}
     	}
+    }*/
+    
+    void pre_processing1(float sigma, float alpha){
+    	
+    	Image_Edge canny = new Image_Edge();
+    	
+    	IJ.run("Enhance Contrast", "saturated=2");
+	    IJ.run("Gaussian Blur...", "sigma="+sigma);
+	    IJ.run("8-bit");
+	     	    
+	    canny.setAlpha(alpha);
+	    canny.EdgeDetection(imp);
+	     	    
+	    IJ.selectWindow("Area Outline");
+	   	imp = IJ.getImage();
     }
     
     void pre_processing2(float sigma, float alpha){
@@ -337,9 +368,11 @@ public class Counter_HC implements PlugInFilter {
 	     	    
 	    IJ.selectWindow("Area Outline");
 	   	imp = IJ.getImage();
+	   	WindowManager.setTempCurrentImage(imp);
+	   	
+	   	IJ.run("Watershed");
     }
-    
-    void pre_processing3(){
+    /*void pre_processing3(){
     	
     	float alpha = (float) 1.2;
     	
@@ -357,7 +390,7 @@ public class Counter_HC implements PlugInFilter {
 	    WindowManager.setTempCurrentImage(imp);
 	    
 	    IJ.run("Watershed");
-    }
+    }*/
     
     private void inicializaVetor( int[] vet){
         for( int i = 0; i < vet.length; i ++ ){
