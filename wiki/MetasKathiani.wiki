@@ -1,7 +1,7 @@
 == METAS EM ABERTO (30/03 - 08/03) ==
- *Separar as imagens em 3 categorias de acordo com a disposição das colônias(separadas e/ou íntegras) e aplicar o algoritmo Template Matching em todas as imagens  *(F)*
+ * Separar as imagens em 3 categorias de acordo com a disposição das colônias(separadas e/ou íntegras) e aplicar o algoritmo Template Matching em todas as imagens  *(F)*
 
- * Calcular erros mínimo, médio e máximo de colônias em cada categoria.
+ * Calcular erros mínimo, médio e máximo de colônias em cada categoria *(F)*
 
 
 
