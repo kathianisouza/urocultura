@@ -1,6 +1,13 @@
+== METAS EM ABERTO (30/03 - 08/03) ==
+ *Separar as imagens em 3 categorias de acordo com a disposição das colônias(separadas e/ou íntegras) e aplicar o algoritmo Template Matching em todas as imagens  *(F)*
+
+ * Calcular erros mínimo, médio e máximo de colônias em cada categoria.
+
+
+
 ===  METAS EM ABERTO (07/02 - 14/02) ===
 
-   * Aplicar filtro Gaussiano nas imagens através do  método blur da classe GaussianBlur,variando os valores de raio de 4 a 8, antes de aplicar o analisador de partículas   *(ED) *.  
+   * Aplicar filtro Gaussiano nas imagens através do  método blur da classe GaussianBlur,variando os valores de raio de 4 a 8, antes de aplicar o analisador de partículas   *(F) *.  
      
    * Utilizar o plugin Analyse Particles do ImageJ para contar as colônias e verificar seu desempenho * (F) * .
    
