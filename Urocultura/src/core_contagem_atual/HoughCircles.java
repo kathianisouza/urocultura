@@ -2,6 +2,8 @@ package core_contagem_atual;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import canny_filter.Image_Edge;
+
 
 import ij.IJ;
 import ij.ImagePlus;
@@ -40,6 +42,8 @@ public class HoughCircles {
     int radius; // Raio da circunferência localizada.
     
     int lut[][][]; // LookUp Table for rsin e rcos values
+    float[] xPoints; // Coordenadas da borda da circunferência detectada.
+    float[] yPoints; // *************************************************
     
     Point centerPoint[];
     int dadosHough[];
@@ -96,6 +100,8 @@ public class HoughCircles {
         createPetriImage();
         
         new ImagePlus("placa de petri",ipImagePetri).show(); // Exibe imagem somente com a placa.
+    
+        verifyPixelsBound(imagePetriValues);
     }
     
     // Cria o espaço de hough.
@@ -239,5 +245,59 @@ public class HoughCircles {
     	}
     
     	ipImagePetri.setPixels(imagePetriValues);
+    }
+
+    // verifica quais os pixels pertencem a borda da circunferência
+    private void verifyPixelsBound(int[] imagePetriValues){
+        xPoints = new float[width];
+        yPoints = new float[height];
+    	int i = 0;
+    	
+    	for(int x = 0; x < width; x++) {
+    		for(int y = 0; y < height; y++){
+    			if(imagePetriValues[(x+offx)+(y+offy)*offset] != 0 )  {// Edge pixel found
+    				int a = ((x-xc)*(x-xc));
+    				int b = ((y-yc)*(y-yc));
+    				int c = (radius*radius);
+    				//JOptionPane.showMessageDialog(null, "A+B: " +(a+b)+ " C: "+c);
+    				if( a + b >= c - (c*0.00001) ){
+            			xPoints[i] = x;
+            			yPoints[i] = y;
+            			i++;
+            			//JOptionPane.showMessageDialog(null, "X: " +x+ " Y: "+y);
+            		}
+            	}
+            }	
+    	}
+    }
+
+    // GETS
+    
+    public ImageProcessor getImagePreProcessed(){
+    	return ipImagePreProcessed;
+    }
+
+    public ImageProcessor getImagePetri(){
+    	return ipImagePetri;
+    }
+    
+    public int getXC(){
+    	return xc;
+    }
+    
+    public int getYC(){
+    	return yc;
+    }
+    
+    public double getRadius(){
+    	return radius;
+    }
+
+    public float[] getXPixelsPetriBound(){
+    	return xPoints;
+    }
+    
+    public float[] getYPixelsPetriBound(){
+    	return yPoints;
     }
 }

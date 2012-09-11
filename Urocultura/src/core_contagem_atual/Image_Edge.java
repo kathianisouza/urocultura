@@ -1,6 +1,7 @@
 package core_contagem_atual;
 
 import java.util.ArrayList;
+
 import ij.*;
 import ij.gui.GenericDialog;
 import ij.plugin.*;
