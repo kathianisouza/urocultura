@@ -1,4 +1,6 @@
 package core_contagem_atual;
+import hough_circles.HoughCircles;
+import hough_line.Plugin_Hough_Linear;
 import ij.*;
 import ij.process.*;
 import ij.gui.*;
@@ -6,15 +8,17 @@ import ij.io.Opener;
 
 import java.io.File;
 
+import javax.swing.JOptionPane;
+
 import ij.plugin.filter.*;
 
 public class Execution implements PlugInFilter {
-	ImagePlus imp;
+	ImagePlus impOriginal;
 
 	String directoryImages;
 	
 	public int setup(String arg, ImagePlus imp) {
-		this.imp = imp;
+		impOriginal = imp;
 		return DOES_ALL;
 	}
 
@@ -31,10 +35,12 @@ public class Execution implements PlugInFilter {
 		}
 				
 		Opener op = new Opener();
-		imp = op.openImage(directoryImages + list[0]);
+		impOriginal = op.openImage(directoryImages + list[0]);
 		
-		HoughCircles hc = new HoughCircles(imp);
+		HoughCircles hc = new HoughCircles(impOriginal);
+		Plugin_Hough_Linear phl = new Plugin_Hough_Linear(hc.getImagePreProcessed(), hc);
 		
+		JOptionPane.showMessageDialog(null, "PROCESSO FINALIZADO.");
 	}
 
 	// Lê entradas do usuário.
