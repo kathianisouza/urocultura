@@ -1,6 +1,4 @@
 package core_contagem_atual;
-import hough_circles.HoughCircles;
-import hough_line.Plugin_Hough_Linear;
 import ij.*;
 import ij.process.*;
 import ij.gui.*;

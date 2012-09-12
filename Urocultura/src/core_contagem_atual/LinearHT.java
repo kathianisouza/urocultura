@@ -10,7 +10,9 @@ package core_contagem_atual;
  * Date: 2010-07-24
  */
 
+import hough_line.LinearHT.HoughLine;
 import ij.IJ;
+import ij.gui.Line;
 import ij.process.FloatProcessor;
 import ij.process.ImageProcessor;
 
@@ -223,20 +225,20 @@ public class LinearHT {
 		
 		// returns an equivalent Line2D.Double object (to be drawn on a canvas)
 		// with coordinates relative to the image origin
-		public Line2D.Double makeLine2D() {
-			double length = rMax/2;
+		public Line makeLine2D() {
+			int length = (int) rMax/2;
 			JOptionPane.showMessageDialog(null, "Radius: " +radius+ " ,Angle: " +angle);
-			double dx = radius * Math.cos(angle);
-			double dy = radius * Math.sin(angle);
-			double xs = uc + dx;
-			double ys = vc + dy;
-			double x1 = xs - (dy * length);
-			double x2 = xs + (dy * length);
-			double y1 = ys + (dx * length);
-			double y2 = ys - (dx * length);
+			int dx = (int) (radius * Math.cos(angle));
+			int dy = (int) (radius * Math.sin(angle));
+			int xs = uc + dx;
+			int ys = vc + dy;
+			int x1 = xs - (dy * length);
+			int x2 = xs + (dy * length);
+			int y1 = ys + (dx * length);
+			int y2 = ys - (dx * length);
 
-		
-			return new Line2D.Double(x1, y1, x2, y2);
+			
+			return new Line(x1, y1, x2, y2);
 		}
 		
 		// find point of intersection for one pair of lines,
@@ -257,9 +259,3 @@ public class LinearHT {
 	} // end of class HoughLine
 	
 } // end of class LinearHT
-
-
-
-
-
-

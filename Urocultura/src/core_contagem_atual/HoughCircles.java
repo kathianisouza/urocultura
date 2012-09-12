@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import canny_filter.Image_Edge;
 
 
+import hough_circles.HoughCircles;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.WindowManager;
@@ -42,8 +43,8 @@ public class HoughCircles {
     int radius; // Raio da circunferência localizada.
     
     int lut[][][]; // LookUp Table for rsin e rcos values
-    float[] xPoints; // Coordenadas da borda da circunferência detectada.
-    float[] yPoints; // *************************************************
+    int[] xPoints; // Coordenadas da borda da circunferência detectada.
+    int[] yPoints; // *************************************************
     
     Point centerPoint[];
     int dadosHough[];
@@ -249,19 +250,20 @@ public class HoughCircles {
 
     // verifica quais os pixels pertencem a borda da circunferência
     private void verifyPixelsBound(int[] imagePetriValues){
-        xPoints = new float[width];
-        yPoints = new float[height];
+        xPoints = new int[width*height];
+        yPoints = new int[height*height];
     	int i = 0;
     	
     	for(int x = 0; x < width; x++) {
     		for(int y = 0; y < height; y++){
-    			if(imagePetriValues[(x+offx)+(y+offy)*offset] != 0 )  {// Edge pixel found
+    			if(imagePetriValues[(x+offx)+(y+offy)*offset] != 0 )  {
     				int a = ((x-xc)*(x-xc));
     				int b = ((y-yc)*(y-yc));
     				int c = (radius*radius);
     				//JOptionPane.showMessageDialog(null, "A+B: " +(a+b)+ " C: "+c);
-    				if( a + b >= c - (c*0.00001) ){
-            			xPoints[i] = x;
+    				if( a + b >= c - (c*0.01) ){
+    					ipImageOriginal.fillOval(x, y, 5, 5);
+    					xPoints[i] = x;
             			yPoints[i] = y;
             			i++;
             			//JOptionPane.showMessageDialog(null, "X: " +x+ " Y: "+y);
@@ -269,6 +271,9 @@ public class HoughCircles {
             	}
             }	
     	}
+    	//Polygon p = new Polygon(xPoints, yPoints, i);
+    	//ipImageOriginal.fillPolygon(p);
+    	new ImagePlus("pixels desenhado",ipImageOriginal).show();
     }
 
     // GETS
@@ -293,11 +298,11 @@ public class HoughCircles {
     	return radius;
     }
 
-    public float[] getXPixelsPetriBound(){
+    public int[] getXPixelsPetriBound(){
     	return xPoints;
     }
     
-    public float[] getYPixelsPetriBound(){
+    public int[] getYPixelsPetriBound(){
     	return yPoints;
     }
 }

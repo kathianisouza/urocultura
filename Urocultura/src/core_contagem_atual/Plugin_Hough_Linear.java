@@ -1,8 +1,10 @@
 package core_contagem_atual;
 
 import hough_circles.HoughCircles;
+import hough_line.LinearHT;
 import hough_line.LinearHT.HoughLine;
 import ij.ImagePlus;
+import ij.gui.Line;
 import ij.process.ImageProcessor;
 
 import java.awt.Color;
@@ -53,22 +55,21 @@ public class Plugin_Hough_Linear{
 		ip.setLineWidth(LINE_WIDTH);
 		ip.setColor(LINE_COLOR);
 		for (HoughLine hl : lines){
-			Line2D.Double lin = hl.makeLine2D();
+			Line lin = hl.makeLine2D();
 			int u1 = (int) Math.rint(lin.x1);
 			int v1 = (int) Math.rint(lin.y1);
 			int u2 = (int) Math.rint(lin.x2);
 			int v2 = (int) Math.rint(lin.y2);
 			//JOptionPane.showMessageDialog(null, "(" +u1+ "," +v1+ ")" + "(" +u2+ "," +v2+ ")");
-
 			ip.drawLine(u1, v1, u2, v2);
 			
 			verifyPixelsLine(lin);
 		}
 	}
 
-	private void verifyPixelsLine(Line2D.Double lin){
-		float[] xPoints = hc.getXPixelsPetriBound();
-		float[] yPoints = hc.getYPixelsPetriBound();
+	private void verifyPixelsLine(Line lin){
+		int[] xPoints = hc.getXPixelsPetriBound();
+		int[] yPoints = hc.getYPixelsPetriBound();
 		
 		
 		for(int i = 0; i < xPoints.length; i++){
