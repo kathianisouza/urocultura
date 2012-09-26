@@ -1,5 +1,5 @@
 == METAS EM ABERTO (26/09/12) ==
-  * Aplicar HoughCircles para a detecção da placa de Petri   *(F)*
+  * Aplicar Hough Circles para a detecção da placa de Petri   *(F)*
 
   * Aplicar HoughLine para a detecção da linha que divide a placa de Petri, para encontramos a parte da placa em que estão as colônias de bactérias *(ED)*
 
