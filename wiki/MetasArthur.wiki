@@ -1,3 +1,13 @@
+
+
+== METAS EM ABERTO (26/09/12) ==
+  * Aplicar HoughCircles para a detecção da placa de Petri   *(F)*
+
+  * Aplicar HoughLine para a detecção da linha que divide a placa de Petri, para encontramos a parte da placa em que estão as colônias de bactérias *(ED)*
+
+  * Aplicar  eurística na contagem de colônias que se encontram aglomeradas para que em conjunto com as técnicas Template Matching e Hough Circles, haja uma contagem mais precisa dessas colônias *(EA)*
+ 
+
 === METAS EM ABERTO DEZEMBRO (13/12-20/12) ===
     
     * Realizar experimentos, tais como: *(EA)*
@@ -7,7 +17,7 @@
          * Filtro de Gaussian;
          * Realizar testes com o valor de pixel na contagem (50 - 60).
     
-    * Criar classe para arquivar os resultados. *(ED)*     
+    * Criar classe para arquivar os resultados. *(F)*     
 
 === METAS EM ABERTO DEZEMBRO (29/11-06/12) ===
     
@@ -20,7 +30,7 @@
          *- Custo computacional altíssimo, pois varre toda a imagem para       detectar uma colônia de cada vez.
          *- Utilizando este mesmo algoritmo, será necessário testar melhores valores de parada da contagem. (Linha: 176).
 
-    * Criação de um banco de artigos sobre Hough Circles. *(EA)*
+    * Criação de um banco de artigos sobre Hough Circles. *(F)*
 
 === METAS EM ABERTO NOVEMBRO (22/11-29/11) ===
 
@@ -28,7 +38,7 @@
     * Migrar código plugin Hough Circles (Pistori) src,plugins,hough, para svn. *(F)*
     * Migrar imagens para svn. *(F)*
     * Migrar código gerador de amostras para svn. *(F)*
-    * Criação de um banco de artigos sobre Hough Circles. *(EA)*
+    * Criação de um banco de artigos sobre Hough Circles. *(F)*
     * Remover os comentário da wiki. *(F)*
 
 === METAS EM ABERTO NOVEMBRO (15/11-22/11) ===
