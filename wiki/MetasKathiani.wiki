@@ -1,3 +1,12 @@
+== METAS EM ABERTO (26/09/12) ==
+  * Aplicar HoughCircles para a detecção da placa de Petri   *(F)*
+
+  * Aplicar HoughLine para a detecção da linha que divide a placa de Petri, para encontramos a parte da placa em que estão as colônias de bactérias *(ED)*
+
+  * Aplicar  eurística na contagem de colônias que se encontram aglomeradas para que em conjunto com as técnicas Template Matching e Hough Circles, haja uma contagem mais precisa dessas colônias *(EA)*
+ 
+
+
 == METAS EM ABERTO (30/03 - 08/03) ==
  * Separar as imagens em 3 categorias de acordo com a disposição das colônias(separadas e/ou íntegras) e aplicar o algoritmo Template Matching em todas as imagens  *(F)*
 
